@@ -50,7 +50,6 @@
             --transition-fast: 0.2s var(--easing-smooth);
             --transition-med: 0.4s var(--easing-smooth);
             
-            --z-grid: 1;
             --z-noise: 999;
             --z-nav: 1000;
             --z-modal: 2000;
@@ -74,33 +73,13 @@
         ::selection { background: var(--brand-accent); color: var(--text-white); }
         html { scroll-behavior: auto; }
 
-        /* Ambient Fintech Grid */
-        .ambient-grid {
-            position: fixed; inset: 0; pointer-events: none; z-index: var(--z-grid); opacity: 0.25;
-            background-size: 40px 40px;
-            background-image: 
-                linear-gradient(to right, rgba(0,0,0,0.05) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(0,0,0,0.05) 1px, transparent 1px);
-            mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 80%);
-            -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 80%);
-            transition: opacity 0.5s;
-        }
-        body:has(.nav-dark) .ambient-grid {
-            background-image: 
-                linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px);
-        }
-
-        /* Cinematic Multi-Panel Preloader */
+        /* Cinematic Preloader */
         #preloader {
-            position: fixed; inset: 0; z-index: var(--z-preloader); pointer-events: none;
-            display: flex; justify-content: center; align-items: center; color: #fff;
+            position: fixed; inset: 0; background: #000; z-index: var(--z-preloader);
+            display: flex; flex-direction: column; justify-content: center; align-items: center; color: #fff;
         }
-        .preloader-shutter { position: absolute; inset: 0; display: flex; flex-direction: column; }
-        .shutter-panel { flex: 1; background: #000; width: 100%; transform-origin: top; }
-        .preloader-content { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; }
         .preloader-brand { font-size: 14px; letter-spacing: 4px; text-transform: uppercase; font-weight: 600; margin-bottom: 20px; opacity: 0.7; }
-        .preloader-counter { font-size: clamp(60px, 10vw, 120px); font-weight: 400; letter-spacing: -4px; line-height: 1; overflow: hidden; }
+        .preloader-counter { font-size: clamp(60px, 10vw, 120px); font-weight: 400; letter-spacing: -4px; line-height: 1; }
         .preloader-bar-wrap { width: 240px; height: 2px; background: rgba(255,255,255,0.1); margin-top: 40px; position: relative; overflow: hidden; }
         .preloader-bar { position: absolute; top: 0; left: 0; height: 100%; width: 0%; background: var(--primary-blue); }
 
@@ -129,27 +108,11 @@
         }
 
         #scroll-progress { position: fixed; top: 0; left: 0; width: 0%; height: 3px; background: linear-gradient(90deg, var(--primary-blue), #7DD3FC); z-index: 9999; transition: width 0.1s ease-out; }
-        .velocity-wrapper { transition: transform 0.1s linear; will-change: transform; position: relative; z-index: 2; }
+        .velocity-wrapper { transition: transform 0.1s linear; will-change: transform; }
 
-        /* SplitType & Text Scubbing Styles */
+        /* SplitType Base Styles */
         .char { transform-origin: bottom center; display: inline-block; }
         .scrub-word { opacity: 0.15; transition: opacity 0.1s; }
-        
-        .gsap-text-fill {
-            background: linear-gradient(to right, #111 50%, #d0d0d0 50%);
-            background-size: 200% 100%;
-            background-position: 100% 0;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            color: transparent;
-        }
-        .dark-zone .gsap-text-fill {
-            background: linear-gradient(to right, #fff 50%, #444 50%);
-            background-size: 200% 100%;
-            background-position: 100% 0;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
 
         /* ==========================================
            2. NAVIGATION & MEGA MENUS
@@ -212,7 +175,7 @@
         .hero-wrapper { padding: 0 24px 24px 24px; background-color: var(--nav-bg); }
         .hero { position: relative; width: 100%; min-height: calc(100vh - 120px); background-color: var(--hero-bg); border-radius: 24px; overflow: hidden; display: flex; align-items: center; justify-content: center; text-align: center; }
         
-        .hero-bg-container { position: absolute; inset: -5%; z-index: 1; will-change: transform; } /* Extended inset for GSAP Scrub */
+        .hero-bg-container { position: absolute; inset: 0; z-index: 1; }
         .hero-video { width: 100%; height: 100%; object-fit: cover; filter: grayscale(20%); opacity: 0.3; position: absolute; inset: 0; }
         .hero-vanta-canvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 2; opacity: 0; mix-blend-mode: screen; transition: opacity 2s ease; } 
         
@@ -227,7 +190,7 @@
         .btn-secondary { background-color: rgba(255, 255, 255, 0.15); color: #fff; backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.05); }
         .btn-secondary:hover { background-color: rgba(255,255,255,0.25); border-color: rgba(255,255,255,0.2); }
 
-        .data-section { padding: 120px 48px; background-color: #f7f7f7; max-width: 1440px; margin: 0 auto 40px; border-radius: 40px; position: relative; z-index: 2;}
+        .data-section { padding: 120px 48px; background-color: #f7f7f7; max-width: 1440px; margin: 0 auto 40px; border-radius: 40px; }
         .quote-container { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 100px; gap: 60px; }
         .quote-text { font-size: clamp(32px, 4.5vw, 64px); font-weight: 500; line-height: 1.15; letter-spacing: -2px; color: var(--text-dark); max-width: 900px; }
         .quote-author { display: flex; flex-direction: column; gap: 16px; min-width: 200px; }
@@ -239,13 +202,13 @@
         .stat-desc { font-size: 16px; color: var(--text-grey); line-height: 1.5; font-weight: 400; max-width: 280px; transform: translateZ(30px); pointer-events: none; }
         .stat-number { font-size: clamp(48px, 6vw, 100px); font-weight: 400; color: var(--text-dark); letter-spacing: -3px; transform: translateZ(50px); line-height: 1; pointer-events: none; }
 
-        .clients-section { padding: 120px 0; background-color: var(--bg-page); max-width: 100vw; overflow: hidden; text-align: center; position: relative; z-index: 2; }
+        .clients-section { padding: 120px 0; background-color: var(--bg-page); max-width: 100vw; overflow: hidden; text-align: center; }
         .clients-header { max-width: 800px; margin: 0 auto 60px auto; padding: 0 48px; }
         .clients-header h2 { font-size: clamp(32px, 5vw, 56px); font-weight: 500; color: var(--text-dark); line-height: 1.15; letter-spacing: -1.5px; margin-bottom: 24px; text-wrap: balance; }
         .clients-header p { font-size: clamp(16px, 2vw, 18px); color: var(--text-grey); line-height: 1.6; font-weight: 400; }
         
         .marquee-container { display: flex; width: max-content; }
-        .clients-marquee-track { display: flex; gap: 24px; padding: 0 12px; animation: scrollMarquee 25s linear infinite; will-change: transform; }
+        .clients-marquee-track { display: flex; gap: 24px; padding: 0 12px; animation: scrollMarquee 25s linear infinite; }
         .clients-marquee-track:hover { animation-play-state: paused; }
         
         @keyframes scrollMarquee { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
@@ -255,7 +218,7 @@
         .client-card:hover .client-logo { opacity: 1; filter: grayscale(0%); }
         .client-logo svg { height: 28px; width: auto; fill: currentColor; }
 
-        .features-section { padding: 160px 48px; background-color: var(--bg-page); max-width: 1440px; margin: 0 auto; position: relative; z-index: 2; }
+        .features-section { padding: 160px 48px; background-color: var(--bg-page); max-width: 1440px; margin: 0 auto; position: relative; }
         .features-layout { display: grid; grid-template-columns: 350px 1fr; gap: 80px; align-items: flex-start; }
         .features-tabs-sticky { position: sticky; top: 160px; display: flex; flex-direction: column; gap: 24px; padding-bottom: 40px; }
         .feature-tab { font-size: clamp(18px, 2vw, 24px); font-weight: 400; color: var(--text-light-grey); transition: all 0.3s ease; display: flex; align-items: center; gap: 12px; transform: translateX(0); }
@@ -306,7 +269,7 @@
         .mgt-row.reversed { grid-template-columns: 0.8fr 1.2fr; }
 
         .mgt-image-card { position: relative; border-radius: 24px; overflow: hidden; min-height: 400px; display: flex; align-items: flex-end; box-shadow: 0 20px 50px rgba(0,0,0,0.5); clip-path: inset(0 0 0 0 round 24px); }
-        .mgt-image-bg { position: absolute; inset: -15%; background-position: center; background-size: cover; will-change: transform; } 
+        .mgt-image-bg { position: absolute; inset: -10%; background-position: center; background-size: cover; will-change: transform; } 
         .mgt-card-content { position: relative; z-index: 2; padding: 40px; width: 100%; background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.4) 70%, transparent 100%); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-top: 1px solid rgba(255,255,255,0.05); }
         .mgt-card-content p { font-size: clamp(16px, 2vw, 24px); color: #fff; line-height: 1.5; font-weight: 400; max-width: 600px; pointer-events: none; }
 
@@ -351,7 +314,7 @@
         /* ==========================================
            7. TESTIMONIAL SECTION
            ========================================== */
-        .testimonial-section { padding: 120px 48px 40px 48px; background-color: var(--bg-page); max-width: 1440px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; position: relative; z-index: 2; }
+        .testimonial-section { padding: 120px 48px 40px 48px; background-color: var(--bg-page); max-width: 1440px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; }
         .test-header { text-align: center; margin-bottom: 60px; }
         .test-header h2 { font-size: clamp(32px, 5vw, 56px); font-weight: 500; color: var(--text-dark); line-height: 1.15; letter-spacing: -2px; margin-bottom: 24px; }
         .test-header p { font-size: 16px; color: var(--text-grey); }
@@ -389,7 +352,7 @@
         /* ==========================================
            8. CASE STUDY BENTO GRID 
            ========================================== */
-        .case-study-section { padding: 40px 48px 120px 48px; background-color: var(--bg-page); max-width: 1440px; margin: 0 auto; position: relative; z-index: 2;}
+        .case-study-section { padding: 40px 48px 120px 48px; background-color: var(--bg-page); max-width: 1440px; margin: 0 auto; }
         .cs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
         .cs-card { border-radius: 24px; overflow: hidden; position: relative; }
         .cs-card-text { background-color: #f4efeb; padding: 60px; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-start; min-height: 400px; gap: 40px;}
@@ -408,7 +371,7 @@
         /* ==========================================
            9. BLOG & UPDATES SECTION 
            ========================================== */
-        .blog-section { padding: 40px 48px 120px 48px; background-color: var(--bg-page); max-width: 1440px; margin: 0 auto; position: relative; z-index: 2;}
+        .blog-section { padding: 40px 48px 120px 48px; background-color: var(--bg-page); max-width: 1440px; margin: 0 auto; }
         .blog-header-wrapper { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 60px; gap: 40px; flex-wrap: wrap; }
         .blog-header { max-width: 650px; }
         .blog-header h2 { font-size: clamp(28px, 4.5vw, 52px); font-weight: 400; letter-spacing: -1.5px; color: var(--text-dark); margin-bottom: 24px; line-height: 1.1; }
@@ -420,6 +383,7 @@
         .blog-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.06); }
         
         .blog-img-wrap { width: 100%; height: 240px; overflow: hidden; position: relative; }
+        /* WebGL Image Container overrides for Shery.js */
         .blog-img { width: 100%; height: 100%; object-fit: cover; }
         
         .blog-content { padding: 32px; display: flex; flex-direction: column; flex-grow: 1; }
@@ -433,25 +397,15 @@
         .b-author-role { font-size: 13px; font-weight: 400; color: #888; }
 
         /* ==========================================
-           NEW PRO 100: ENTERPRISE SECURITY SECTION
-           ========================================== */
-        .security-section { background-color: #000; padding: 120px 48px; text-align: center; position: relative; z-index: 5; overflow: hidden; border-bottom: 1px solid rgba(255,255,255,0.1); }
-        .sec-container { max-width: 1000px; margin: 0 auto; position: relative; z-index: 2; }
-        .security-section h2 { font-size: clamp(40px, 6vw, 80px); font-weight: 500; letter-spacing: -2px; margin-bottom: 60px; line-height: 1.1; }
-        .sec-badges { display: flex; justify-content: center; gap: 24px; flex-wrap: wrap; }
-        .sec-badge { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 24px 40px; border-radius: 20px; color: #fff; font-size: 18px; font-weight: 500; backdrop-filter: blur(10px); transform-style: preserve-3d; }
-        .sec-bg-glow { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 600px; height: 600px; background: radial-gradient(circle, rgba(59,130,246,0.15) 0%, transparent 70%); z-index: 0; pointer-events: none; }
-
-        /* ==========================================
            NEW: KINETIC MARQUEE SECTION
            ========================================== */
-        .kinetic-section { background-color: #000; padding: 60px 0; overflow: hidden; position: relative; z-index: 5; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .kinetic-section { background-color: #000; padding: 60px 0; overflow: hidden; border-bottom: 1px solid rgba(255,255,255,0.1); }
         .kinetic-text-wrapper { display: flex; width: max-content; }
         .kinetic-text {
             font-size: clamp(80px, 12vw, 160px); font-weight: 700; color: transparent; 
             -webkit-text-stroke: 1px rgba(255,255,255,0.2); letter-spacing: -2px; 
             white-space: nowrap; padding: 0 40px; animation: scrollMarquee 20s linear infinite;
-            display: flex; gap: 80px; align-items: center; will-change: transform;
+            display: flex; gap: 80px; align-items: center;
         }
         .kinetic-text span { transition: all 0.3s; cursor: default; }
         .kinetic-text span:hover { color: #fff; -webkit-text-stroke: 1px #fff; text-shadow: 0 0 30px rgba(255,255,255,0.5); }
@@ -461,10 +415,10 @@
         /* ==========================================
            10. CTA SECTION 
            ========================================== */
-        .cta-section { padding: 40px 48px 120px 48px; background-color: #000; max-width: 1440px; margin: 0 auto; display: flex; justify-content: center; position: relative; z-index: 5; }
+        .cta-section { padding: 40px 48px 120px 48px; background-color: #000; max-width: 1440px; margin: 0 auto; display: flex; justify-content: center; transition: background-color 0.5s; }
         .cta-container { width: 100%; max-width: 1300px; border-radius: 20px; padding: 60px; display: flex; justify-content: flex-end; align-items: center; min-height: 550px; position: relative; overflow: hidden; }
         
-        .cta-bg { position: absolute; inset: -15%; background: url('https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?q=80&w=1400&auto=format&fit=crop') center/cover no-repeat; z-index: 0; will-change: transform; }
+        .cta-bg { position: absolute; inset: -10%; background: url('https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?q=80&w=1400&auto=format&fit=crop') center/cover no-repeat; z-index: 0; will-change: transform; }
         
         .cta-card { background-color: rgba(0,0,0,0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-radius: 20px; padding: 48px; max-width: 440px; color: #ffffff; box-shadow: 0 20px 50px rgba(0,0,0,0.3); position: relative; z-index: 2; width: 100%; border: 1px solid rgba(255,255,255,0.1); }
         .cta-card h2 { font-size: clamp(28px, 3.5vw, 40px); font-weight: 400; line-height: 1.15; letter-spacing: -1px; margin-bottom: 24px; color: #ffffff; }
@@ -561,7 +515,7 @@
             .menu-product { width: 100%; grid-template-columns: 1fr; gap: 20px; }
             
             .hero-wrapper { padding: 0 12px 12px 12px; }
-            .data-section, .clients-section, .features-section, .management-section, .workflows-section, .testimonial-section, .case-study-section, .blog-section, .footer-section, .security-section { padding-left: 24px; padding-right: 24px; padding-top: 80px; padding-bottom: 80px; }
+            .data-section, .clients-section, .features-section, .management-section, .workflows-section, .testimonial-section, .case-study-section, .blog-section, .footer-section { padding-left: 24px; padding-right: 24px; padding-top: 80px; padding-bottom: 80px; }
             .cta-section { padding: 40px 24px 80px 24px; }
             .data-section { padding-top: 60px; padding-bottom: 60px; }
             
@@ -601,19 +555,11 @@
 </head>
 <body class="no-scroll">
 
-    <div class="ambient-grid"></div>
-
     <div id="preloader">
-        <div class="preloader-shutter">
-            <div class="shutter-panel panel-top"></div>
-            <div class="shutter-panel panel-bottom"></div>
-        </div>
-        <div class="preloader-content">
-            <div class="preloader-brand">Vectura Infrastructure</div>
-            <div class="preloader-counter" id="loader-count">0%</div>
-            <div class="preloader-bar-wrap">
-                <div class="preloader-bar" id="loader-bar"></div>
-            </div>
+        <div class="preloader-brand">Vectura</div>
+        <div class="preloader-counter" id="loader-count">0%</div>
+        <div class="preloader-bar-wrap">
+            <div class="preloader-bar" id="loader-bar"></div>
         </div>
     </div>
 
@@ -657,7 +603,7 @@
         
         <div class="hero-wrapper">
             <section class="hero" id="heroSec">
-                <div class="hero-bg-container parallax-container">
+                <div class="hero-bg-container" id="hero-bg">
                     <video class="hero-video" autoplay loop muted playsinline><source src="https://assets.codepen.io/3364143/7btrrd.mp4" type="video/mp4"></video>
                     <div class="hero-vanta-canvas" id="vanta-canvas"></div>
                 </div>
@@ -690,13 +636,13 @@
 
         <section class="clients-section section-target" id="clients">
             <div class="clients-header">
-                <h2 class="gsap-text-fill">Join hundreds of teams moving beyond spreadsheets</h2>
+                <h2>Join hundreds of teams<br>moving beyond spreadsheets</h2>
                 <p>Our clients include forward-thinking startups and global leaders — all redefining how modern finance teams work.</p>
             </div>
             <div class="clients-divider" id="clientsDivider"></div>
             
             <div class="marquee-container">
-                <div class="clients-marquee-track vel-marquee">
+                <div class="clients-marquee-track">
                     <div class="client-card interactable"><div class="client-logo"><svg viewBox="0 0 100 50"><path d="M10,25 a15,15 0 1,0 30,0 a15,15 0 1,0 -30,0" stroke="#111" stroke-width="4" fill="none"/></svg></div></div>
                     <div class="client-card interactable"><div class="client-logo"><svg viewBox="0 0 100 50"><path d="M20,35 Q10,15 30,15 T50,35 T70,15 T90,35" stroke="#111" stroke-width="6" fill="none"/></svg></div></div>
                     <div class="client-card interactable"><div class="client-logo"><span>Catalxg</span></div></div>
@@ -791,21 +737,9 @@
             </div>
         </section>
 
-        <section class="security-section dark-zone section-target" id="security">
-            <div class="sec-bg-glow"></div>
-            <div class="sec-container">
-                <h2 class="gsap-text-fill">Bank-grade security. Default.</h2>
-                <div class="sec-badges">
-                    <div class="sec-badge interactable magnetic-btn" data-tilt data-tilt-glare data-tilt-max-glare="0.2">SOC 2 Type II</div>
-                    <div class="sec-badge interactable magnetic-btn" data-tilt data-tilt-glare data-tilt-max-glare="0.2">GDPR Compliant</div>
-                    <div class="sec-badge interactable magnetic-btn" data-tilt data-tilt-glare data-tilt-max-glare="0.2">End-to-End Encryption</div>
-                </div>
-            </div>
-        </section>
-
         <section class="management-section dark-zone section-target" id="management">
             <div class="management-header">
-                <h2 class="gsap-text-fill">Built-in management tools that keep your team aligned</h2>
+                <h2>Built-in management tools<br>that keep your team aligned</h2>
             </div>
             
             <div class="management-grid">
@@ -907,7 +841,7 @@
 
         <section class="testimonial-section section-target" id="testimonial">
             <div class="test-header">
-                <h2 class="gsap-text-fill">The Vectura shift—straight from our users</h2>
+                <h2>The Vectura shift—<br>straight from our users</h2>
                 <p>Hear how Vectura is helping finance leaders take control.</p>
             </div>
             
@@ -924,9 +858,19 @@
                             </div>
                             <div class="test-logos">
                                 <div class="logo-active">
-                                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="8" height="8" fill="#111" fill-opacity="0.5"/><rect x="13" y="3" width="8" height="8" fill="#111"/><rect x="13" y="13" width="8" height="8" fill="#111"/><rect x="3" y="13" width="8" height="8" fill="#111"/></svg> OdeaoLabs
+                                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+                                        <rect x="3" y="3" width="8" height="8" fill="#111" fill-opacity="0.5"/>
+                                        <rect x="13" y="3" width="8" height="8" fill="#111"/>
+                                        <rect x="13" y="13" width="8" height="8" fill="#111"/>
+                                        <rect x="3" y="13" width="8" height="8" fill="#111"/>
+                                    </svg> OdeaoLabs
                                 </div>
-                                <div class="logo-faded"><svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 16c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z"/></svg> Quantum²</div>
+                                <div class="logo-faded">
+                                    <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 16c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z"/></svg> Quantum²
+                                </div>
+                                <div class="logo-faded">
+                                    <svg width="40" height="20" viewBox="0 0 40 20" fill="none" stroke="currentColor" stroke-width="3"><rect x="2" y="2" width="36" height="16" rx="8" /></svg> Ikigai Labs
+                                </div>
                             </div>
                         </div>
                         <div class="test-quote">
@@ -944,7 +888,7 @@
                     <div class="swiper-slide test-card interactable">
                         <div class="test-card-top">
                             <div class="test-author">
-                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200&auto=format&fit=crop" alt="David Silva" class="author-avatar" loading="lazy">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200&auto=format&fit=crop" alt="Jordan Malik" class="author-avatar" loading="lazy">
                                 <div class="author-details">
                                     <span class="author-name">David Silva</span>
                                     <span class="author-role">CFO</span>
@@ -991,7 +935,7 @@
                     <div class="cs-stat-bottom">Annual supplier spend managed in real time</div>
                 </div>
                 
-                <div class="cs-card cs-card-image interactable parallax-container shery-elem">
+                <div class="cs-card cs-card-image interactable parallax-container">
                     <div class="cs-card-bg"></div>
                     <svg width="40" height="40" viewBox="0 0 40 40" fill="none" class="cs-logo-r">
                         <path d="M0 0H40V20L20 40H0V0Z" fill="white"/>
@@ -1003,14 +947,14 @@
         <section class="blog-section section-target" id="blog">
             <div class="blog-header-wrapper">
                 <div class="blog-header">
-                    <h2 class="gsap-text-fill">Ideas, insights, and updates from our team</h2>
+                    <h2>Ideas, insights, and<br>updates from our team</h2>
                     <p>From product announcements to practical guides — stay in the loop with how Vectura is building smarter finance workflows and sharing what we’ve learned along the way.</p>
                 </div>
                 <a href="#" class="btn-blog magnetic-btn">View all posts</a>
             </div>
             
             <div class="blog-grid" id="gsap-blog-grid">
-                <div class="blog-card interactable shery-elem">
+                <div class="blog-card interactable">
                     <div class="blog-img-wrap">
                         <img src="https://images.unsplash.com/photo-1573164713988-8665fc963095?q=80&w=800&auto=format&fit=crop" alt="Scaling Finance Ops" class="blog-img" loading="lazy">
                     </div>
@@ -1024,7 +968,7 @@
                     </div>
                 </div>
 
-                <div class="blog-card interactable shery-elem">
+                <div class="blog-card interactable">
                     <div class="blog-img-wrap">
                         <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=800&auto=format&fit=crop" alt="Modern Budget Workflows" class="blog-img" loading="lazy">
                     </div>
@@ -1038,7 +982,7 @@
                     </div>
                 </div>
 
-                <div class="blog-card interactable shery-elem">
+                <div class="blog-card interactable">
                     <div class="blog-img-wrap">
                         <img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=800&auto=format&fit=crop" alt="Roles & Permissions" class="blog-img" loading="lazy">
                     </div>
@@ -1056,7 +1000,7 @@
 
         <section class="kinetic-section dark-zone">
             <div class="kinetic-text-wrapper">
-                <div class="kinetic-text interactable vel-marquee">
+                <div class="kinetic-text interactable">
                     <span>BUILD SMARTER.</span>
                     <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     <span>SCALE FASTER.</span>
@@ -1128,10 +1072,10 @@
 
                 <div class="footer-middle">
                     <div class="footer-socials">
-                        <a href="#" aria-label="Facebook" class="interactable magnetic-btn"><svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
-                        <a href="#" aria-label="X / Twitter" class="interactable magnetic-btn"><svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
-                        <a href="#" aria-label="Instagram" class="interactable magnetic-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
-                        <a href="#" aria-label="LinkedIn" class="interactable magnetic-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg></a>
+                        <a href="#" aria-label="Facebook" class="interactable"><svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+                        <a href="#" aria-label="X / Twitter" class="interactable"><svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+                        <a href="#" aria-label="Instagram" class="interactable"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                        <a href="#" aria-label="LinkedIn" class="interactable"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg></a>
                     </div>
                     <div class="footer-location"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Powell, Ohio (OH), USA</div>
                 </div>
@@ -1176,6 +1120,7 @@
             duration: 1.2, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), direction: 'vertical',
             gestureDirection: 'vertical', smooth: true, mouseMultiplier: 1, smoothTouch: false, touchMultiplier: 2, infinite: false,
         });
+
         function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
         requestAnimationFrame(raf);
 
@@ -1200,16 +1145,12 @@
                 if(progress > 100) progress = 100;
                 counter.innerText = progress + '%'; bar.style.width = progress + '%';
                 if(progress === 100) { clearInterval(interval); startSiteSequence(); }
-            }, 80);
+            }, 100);
         });
 
         function startSiteSequence() {
             const tl = gsap.timeline();
-            
-            // Shutter Exit
-            tl.to('.preloader-content', { opacity: 0, duration: 0.5, ease: 'power2.out' })
-              .to('.shutter-panel', { scaleY: 0, stagger: 0.1, duration: 0.8, ease: 'power4.inOut' })
-              .set('#preloader', { display: 'none' })
+            tl.to('#preloader', { yPercent: -100, duration: 1, ease: 'power4.inOut', delay: 0.2 })
               .call(() => {
                   document.body.classList.remove('no-scroll');
                   if(document.getElementById("vanta-canvas")) {
@@ -1219,13 +1160,13 @@
                   
                   // Initialize Shery.js WebGL effects post-load
                   if(window.matchMedia("(pointer: fine)").matches) {
-                      Shery.imageEffect(".shery-elem .blog-img, .shery-elem .cs-card-bg", {
+                      Shery.imageEffect(".blog-img", {
                           style: 3, 
-                          config: { "uFrequencyX": {"value": 12},"uFrequencyY": {"value": 12},"uFrequencyZ": {"value": 10},"geoVertex": {"value": 32},"zindex": {"value": -9996999},"aspect": {"value": 1.6},"ignoreShapeAspect": {"value": true},"shapePosition": {"value": {"x": 0,"y": 0}},"shapeScale": {"value": {"x": 0.5,"y": 0.5}},"shapeEdgeSoftness": {"value": 0},"shapeRadius": {"value": 0},"currentScroll": {"value": 0},"scrollLerp": {"value": 0.07},"gooey": {"value": false},"infiniteGooey": {"value": false},"growSize": {"value": 4},"durationOut": {"value": 1},"durationIn": {"value": 1.5},"displaceAmount": {"value": 0.5},"masker": {"value": true},"maskVal": {"value": 1.2},"scrollType": {"value": 0},"noEffectGooey": {"value": true},"onMouse": {"value": 1},"noise_speed": {"value": 0.2},"metaball": {"value": 0.2},"discard_threshold": {"value": 0.5},"antialias_threshold": {"value": 0.002},"noise_height": {"value": 0.5},"noise_scale": {"value": 10}}
+                          config: { "uFrequencyX": {"value": 12,"range": [0, 100]},"uFrequencyY": {"value": 12,"range": [0, 100]},"uFrequencyZ": {"value": 10,"range": [0, 100]},"geoVertex": {"range": [1, 64],"value": 32},"zindex": {"value": -9996999,"range": [-9999999, 9999999]},"aspect": {"value": 1.6},"ignoreShapeAspect": {"value": true},"shapePosition": {"value": {"x": 0,"y": 0}},"shapeScale": {"value": {"x": 0.5,"y": 0.5}},"shapeEdgeSoftness": {"value": 0,"range": [0, 0.5]},"shapeRadius": {"value": 0,"range": [0, 2]},"currentScroll": {"value": 0},"scrollLerp": {"value": 0.07},"gooey": {"value": false},"infiniteGooey": {"value": false},"growSize": {"value": 4,"range": [1, 15]},"durationOut": {"value": 1,"range": [0.1, 5]},"durationIn": {"value": 1.5,"range": [0.1, 5]},"displaceAmount": {"value": 0.5},"masker": {"value": true},"maskVal": {"value": 1.2,"range": [1, 5]},"scrollType": {"value": 0},"noEffectGooey": {"value": true},"onMouse": {"value": 1},"noise_speed": {"value": 0.2,"range": [0, 10]},"metaball": {"value": 0.2,"range": [0, 2]},"discard_threshold": {"value": 0.5,"range": [0, 1]},"antialias_threshold": {"value": 0.002,"range": [0, 0.1]},"noise_height": {"value": 0.5,"range": [0, 2]},"noise_scale": {"value": 10,"range": [0, 100]}}
                       });
                   }
               })
-            .to('.navbar', { y: 0, duration: 0.8, ease: 'power3.out' }, "-=0.2")
+            .to('.navbar', { y: 0, duration: 0.8, ease: 'power3.out' }, "-=0.5")
             .from(new SplitType('.gsap-hero-title', { types: 'chars' }).chars, { y: 40, opacity: 0, rotateX: -90, stagger: 0.02, duration: 1.2, ease: 'back.out(1.2)' }, "-=0.5")
             .to('.gsap-hero-desc', { y: 0, opacity: 1, duration: 1, ease: 'power3.out' }, "-=0.8")
             .to('.gsap-hero-btn', { y: 0, opacity: 1, duration: 1, ease: 'power3.out' }, "-=0.8");
@@ -1265,25 +1206,28 @@
         }
 
         // ==========================================
-        // 5. GSAP SCROLL-SCRUBBED TYPOGRAPHY & MASKS
+        // 5. GSAP SCROLL-SCRUBBED TYPOGRAPHY (PRO LEVEL)
         // ==========================================
-        // Background-clip Gradient Text Reveal
-        gsap.utils.toArray('.gsap-text-fill').forEach(text => {
-            gsap.to(text, {
-                backgroundPosition: "0% 0", ease: "none",
-                scrollTrigger: { trigger: text, start: "top 85%", end: "bottom 50%", scrub: true }
+        // Split texts that need scrub reveals
+        document.querySelectorAll('.scroll-scrub-text, #quoteText').forEach(el => {
+            const split = new SplitType(el, { types: 'words', wordClass: 'scrub-word' });
+            
+            gsap.to(split.words, {
+                opacity: 1,
+                stagger: 0.1,
+                ease: "none",
+                scrollTrigger: {
+                    trigger: el,
+                    start: "top 85%",
+                    end: "bottom 60%",
+                    scrub: true
+                }
             });
         });
 
-        // Fallback for non-gradient scrub
-        document.querySelectorAll('.scroll-scrub-text, #quoteText').forEach(el => {
-            const split = new SplitType(el, { types: 'words', wordClass: 'scrub-word' });
-            gsap.to(split.words, { opacity: 1, stagger: 0.1, ease: "none", scrollTrigger: { trigger: el, start: "top 85%", end: "bottom 60%", scrub: true }});
-        });
-
-        // Advanced Parallax Scrubbing
+        // Advanced Parallax Scrubbing for Background Images
         gsap.utils.toArray('.parallax-container').forEach(container => {
-            const bg = container.querySelector('.mgt-image-bg, .bento-hero-bg, .cs-card-bg, .cta-bg, .hero-bg-container');
+            const bg = container.querySelector('.mgt-image-bg, .bento-hero-bg, .cs-card-bg, .cta-bg');
             if(bg) {
                 gsap.to(bg, { yPercent: 20, ease: "none", scrollTrigger: { trigger: container, start: "top bottom", end: "bottom top", scrub: true } });
             }
@@ -1292,6 +1236,11 @@
         // Staggered Bento Cards
         gsap.utils.toArray('#gsap-bento-grid .bento-card-small').forEach((bento, i) => {
             gsap.fromTo(bento, { opacity: 0, y: 50 }, { scrollTrigger: { trigger: '#gsap-bento-grid', start: 'top 85%' }, opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', delay: i * 0.15 });
+        });
+
+        // Staggered Blog Cards
+        gsap.utils.toArray('#gsap-blog-grid .blog-card').forEach((blog, i) => {
+            gsap.fromTo(blog, { opacity: 0, y: 40 }, { scrollTrigger: { trigger: '#blog', start: 'top 80%' }, opacity: 1, y: 0, duration: 0.8, ease: 'power2.out', delay: i * 0.15 });
         });
 
         // ==========================================
@@ -1319,12 +1268,11 @@
         productNav.addEventListener('click', (e) => { if (window.innerWidth <= 768) { productNav.classList.toggle('mobile-open'); } });
 
         // ==========================================
-        // 9. SCROLL SKEW, VELOCITY TRACKING & DYNAMIC THEMES
+        // 9. SCROLL SKEW, THEME & SCRAMBLE
         // ==========================================
         let lastScrollY = window.scrollY;
         const velocityGrid = document.getElementById('velocityGrid');
         const navbar = document.getElementById('navbar');
-        const marquees = document.querySelectorAll('.vel-marquee');
         let scrollTicking = false;
         
         window.addEventListener('scroll', () => {
@@ -1334,17 +1282,10 @@
 
             if (!scrollTicking) {
                 window.requestAnimationFrame(() => {
-                    const skewAmount = Math.max(-1.5, Math.min(1.5, scrollDelta * 0.03));
-                    const marqueeSkew = Math.max(-10, Math.min(10, scrollDelta * 0.1));
-                    
+                    const skewAmount = Math.max(-1.2, Math.min(1.2, scrollDelta * 0.025));
                     velocityGrid.style.transform = `skewY(${skewAmount}deg)`;
-                    marquees.forEach(m => m.style.transform = `skewX(${marqueeSkew}deg) translateX(${scrollDelta * 0.5}px)`);
-
                     clearTimeout(window.skewTimeout);
-                    window.skewTimeout = setTimeout(() => { 
-                        velocityGrid.style.transform = 'skewY(0deg)'; 
-                        marquees.forEach(m => m.style.transform = `skewX(0deg) translateX(0px)`);
-                    }, 100);
+                    window.skewTimeout = setTimeout(() => { velocityGrid.style.transform = 'skewY(0deg)'; }, 100);
 
                     const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
                     document.getElementById('scroll-progress').style.width = (currentScrollY / height) * 100 + "%";
