@@ -1,0 +1,1798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vectura | Elite Business Finances</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ==========================================
+           1. CSS VARIABLE MATRIX & CORE RESET
+           ========================================== */
+        :root {
+            --font-main: 'Inter', sans-serif;
+            --bg-page: #ffffff;
+            --nav-bg: #ffffff;
+            --nav-text: #111111;
+            --hero-bg: #000000;
+            --text-white: #ffffff;
+            --text-muted: rgba(255, 255, 255, 0.7);
+            --text-dark: #111111;
+            --text-grey: #666666;
+            --text-light-grey: #a0a0a0;
+            --card-bg: #ffffff;
+            --border-faint: rgba(0, 0, 0, 0.06);
+            --error-red: #ff3333;
+            --brand-accent: #000000;
+            --primary-blue: #3B82F6;
+            
+            --easing-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+            --easing-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            --transition-fast: 0.2s var(--easing-smooth);
+            --transition-med: 0.4s var(--easing-smooth);
+            
+            --z-noise: 9999;
+            --z-toast: 3000;
+            --z-modal: 2000;
+            --z-nav: 1000;
+        }
+
+        /* Native cursor restored */
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; font-family: var(--font-main); }
+        body { background-color: var(--bg-page); color: var(--nav-text); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+        body.no-scroll { overflow: hidden; }
+        ::selection { background: var(--brand-accent); color: var(--text-white); }
+        html { scroll-behavior: smooth; }
+
+        .interactable { cursor: pointer; }
+
+        /* Film Grain Noise Overlay */
+        .noise-overlay {
+            position: fixed; inset: 0; pointer-events: none; z-index: var(--z-noise); opacity: 0.035;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* Scroll Progress */
+        #scroll-progress { position: fixed; top: 0; left: 0; width: 0%; height: 3px; background: var(--primary-blue); z-index: 9999; transition: width 0.1s ease-out; }
+
+        /* Global Scroll Velocity Wrapper */
+        .velocity-wrapper { transition: transform 0.1s linear; }
+
+        /* ==========================================
+           2. NAVIGATION & MEGA MENUS
+           ========================================== */
+        .navbar {
+            background-color: var(--nav-bg); display: flex; justify-content: space-between;
+            align-items: center; padding: 24px 48px; position: relative; z-index: var(--z-nav); transition: all var(--transition-med);
+        }
+        .navbar.scrolled { padding: 16px 48px; box-shadow: 0 10px 40px rgba(0,0,0,0.05); position: sticky; top: 0; }
+        
+        /* Dynamic Theme Switching */
+        .navbar.nav-dark { background-color: #000000; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .navbar.nav-dark .logo, .navbar.nav-dark .nav-item { color: #ffffff; }
+        .navbar.nav-dark .nav-item svg.chevron { color: #ffffff; }
+        .navbar.nav-dark .logo svg rect { fill: #ffffff; }
+        .navbar.nav-dark .btn-nav { background-color: #ffffff; color: #000000; }
+        .navbar.nav-dark .btn-nav:hover { background-color: #e0e0e0; }
+
+        .logo { display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 700; color: var(--nav-text); text-decoration: none; letter-spacing: -0.5px; transition: color var(--transition-fast); }
+        .logo svg rect { transition: fill var(--transition-fast); }
+        .nav-links { display: flex; gap: 36px; align-items: center; height: 100%; }
+        .nav-link-wrap { display: inline-block; position: relative; }
+        .nav-item { display: flex; align-items: center; gap: 4px; font-size: 15px; font-weight: 500; color: #444; padding: 24px 0; transition: color var(--transition-fast); }
+        .nav-link-wrap:hover .nav-item { color: var(--primary-blue); }
+        .nav-item svg.chevron { width: 14px; height: 14px; color: #888; transition: transform 0.3s; }
+        .nav-link-wrap:hover svg.chevron { transform: rotate(180deg); color: var(--primary-blue); }
+
+        /* Mega Menu Core */
+        .mega-menu {
+            position: absolute; top: 100%; left: 50%; transform: translateX(-50%) translateY(15px) scale(0.98);
+            background: #ffffff; border-radius: 16px; box-shadow: 0 30px 70px rgba(0,0,0,0.1), 0 0 0 1px rgba(0,0,0,0.04);
+            padding: 32px; opacity: 0; visibility: hidden; pointer-events: none; transition: all 0.4s var(--easing-spring); transform-origin: top center;
+        }
+        .nav-link-wrap:hover .mega-menu { opacity: 1; visibility: visible; pointer-events: auto; transform: translateX(-50%) translateY(0) scale(1); }
+        .menu-product { width: 780px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+        .menu-company { width: 380px; display: flex; flex-direction: column; gap: 24px; padding: 24px; }
+        .mega-header { font-size: 11px; font-weight: 600; color: #888; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 8px; }
+        .mega-item { display: flex; align-items: flex-start; gap: 16px; padding: 12px; margin: -12px; border-radius: 12px; transition: background var(--transition-fast), transform var(--transition-fast); opacity: 0; transform: translateY(10px); }
+        .nav-link-wrap:hover .mega-item { opacity: 1; transform: translateY(0); }
+        .nav-link-wrap:hover .mega-item:nth-child(2) { transition-delay: 0.05s; }
+        .nav-link-wrap:hover .mega-item:nth-child(3) { transition-delay: 0.1s; }
+        .nav-link-wrap:hover .mega-item:nth-child(4) { transition-delay: 0.15s; }
+        .mega-item:hover { background: rgba(0,0,0,0.02); transform: translateX(4px) !important; }
+        .mega-icon { width: 44px; height: 44px; background: #F7F7F7; border-radius: 12px; display: flex; justify-content: center; align-items: center; flex-shrink: 0; color: #111; }
+        .mega-icon svg { width: 20px; height: 20px; stroke-width: 1.5px; }
+        .mega-text h5 { font-size: 15px; font-weight: 500; color: var(--text-dark); margin-bottom: 4px; letter-spacing: -0.2px; }
+        .mega-text p { font-size: 14px; font-weight: 400; color: var(--text-grey); line-height: 1.5; }
+        .btn-nav { background-color: #000; color: #fff; padding: 14px 28px; border-radius: 50px; font-size: 14px; font-weight: 600; border: none; transition: all 0.3s; cursor: pointer; }
+        .btn-nav:hover { background-color: #222; box-shadow: 0 4px 15px rgba(0,0,0,0.2); transform: translateY(-1px); }
+
+        /* ==========================================
+           3. SECTIONS 1-4 (Hero, Data, Clients, Features)
+           ========================================== */
+        /* Hero */
+        .hero-wrapper { padding: 0 24px 24px 24px; background-color: var(--nav-bg); }
+        .hero { position: relative; width: 100%; min-height: calc(100vh - 120px); background-color: var(--hero-bg); border-radius: 24px; overflow: hidden; display: flex; align-items: center; justify-content: center; text-align: center; }
+        .hero-bg-container { position: absolute; top: -5%; left: -5%; width: 110%; height: 110%; z-index: 1; transition: transform 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+        .hero-video { width: 100%; height: 100%; object-fit: cover; filter: grayscale(20%); }
+        .hero-overlay { position: absolute; inset: 0; background: radial-gradient(circle at center, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.85) 100%); z-index: 2; }
+        .hero-content { position: relative; z-index: 3; max-width: 800px; padding: 0 20px; }
+        .hero h1 { color: var(--text-white); font-size: clamp(40px, 5vw, 68px); font-weight: 700; line-height: 1.1; letter-spacing: -1.5px; margin-bottom: 24px; text-wrap: balance; }
+        .hero p { color: var(--text-muted); font-size: clamp(16px, 2vw, 20px); line-height: 1.5; margin: 0 auto 40px auto; max-width: 600px; }
+        .hero-btns { display: flex; gap: 16px; justify-content: center; }
+        .btn-hero { padding: 18px 36px; border-radius: 50px; font-size: 16px; font-weight: 600; border: none; transition: transform 0.2s, box-shadow 0.2s; cursor: pointer; }
+        .btn-hero:hover { transform: translateY(-2px); }
+        .btn-primary { background-color: #fff; color: #000; }
+        .btn-primary:hover { box-shadow: 0 10px 20px rgba(255,255,255,0.2); }
+        .btn-secondary { background-color: rgba(255, 255, 255, 0.15); color: #fff; backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.05); }
+        .btn-secondary:hover { background-color: rgba(255,255,255,0.25); }
+
+        /* Data */
+        .data-section { padding: 120px 48px; background-color: #f7f7f7; max-width: 1440px; margin: 0 auto; border-radius: 40px; margin-top: 40px; }
+        .quote-container { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 100px; gap: 60px; }
+        .quote-text { font-size: clamp(40px, 4.5vw, 64px); font-weight: 500; line-height: 1.15; letter-spacing: -2px; color: var(--text-dark); max-width: 900px; }
+        .reveal-word { display: inline-block; overflow: hidden; vertical-align: bottom; }
+        .reveal-word span { display: inline-block; transform: translateY(110%); transition: transform 0.8s var(--easing-smooth); }
+        .reveal-word.active span { transform: translateY(0); }
+        .quote-author { display: flex; flex-direction: column; gap: 16px; min-width: 200px; }
+        .author-info { font-size: 11px; font-weight: 600; color: #888; letter-spacing: 1.5px; line-height: 1.6; }
+        .author-logo { display: flex; align-items: center; gap: 6px; font-size: 20px; font-weight: 700; letter-spacing: -0.5px; }
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+        .stat-card { background: #ffffff; border-radius: 20px; padding: 40px; box-shadow: 0 10px 40px rgba(0,0,0,0.03); display: flex; flex-direction: column; justify-content: space-between; min-height: 320px; transform-style: preserve-3d; transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.3s; cursor: pointer; }
+        .stat-card:hover { box-shadow: 0 30px 60px rgba(0,0,0,0.08); }
+        .stat-desc { font-size: 16px; color: var(--text-grey); line-height: 1.5; font-weight: 400; max-width: 280px; transform: translateZ(20px); pointer-events: none; }
+        .stat-number { font-size: clamp(60px, 6vw, 100px); font-weight: 400; color: var(--text-dark); letter-spacing: -3px; transform: translateZ(40px); line-height: 1; pointer-events: none; }
+
+        /* Clients */
+        .clients-section { padding: 120px 48px; background-color: var(--bg-page); max-width: 1440px; margin: 0 auto; text-align: center; }
+        .clients-header { max-width: 800px; margin: 0 auto 60px auto; }
+        .clients-header h2 { font-size: clamp(40px, 5vw, 56px); font-weight: 500; color: var(--text-dark); line-height: 1.15; letter-spacing: -1.5px; margin-bottom: 24px; text-wrap: balance; }
+        .clients-header p { font-size: clamp(16px, 2vw, 18px); color: var(--text-grey); line-height: 1.6; font-weight: 400; }
+        .clients-divider { width: 0%; height: 1px; background: #eee; margin: 0 auto 60px auto; transition: width 1s var(--easing-smooth); }
+        .clients-divider.active { width: 100%; }
+        .clients-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 24px; }
+        .client-card { background: var(--card-bg); border-radius: 16px; width: calc(16.666% - 20px); min-width: 180px; height: 120px; display: flex; justify-content: center; align-items: center; position: relative; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.02); border: 1px solid rgba(0,0,0,0.02); opacity: 0; transform: matrix(0.9, 0, 0, 0.9, 0, 20); transition: opacity 0.6s var(--easing-smooth), transform 0.6s var(--easing-spring), box-shadow 0.3s; cursor: pointer; }
+        .client-card.active { opacity: 1; transform: matrix(1, 0, 0, 1, 0, 0); }
+        .client-card:hover { transform: scale(1.05) translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.06); z-index: 2; }
+        .client-card::before { content: ""; position: absolute; inset: 0; background: radial-gradient(400px circle at var(--mouse-x) var(--mouse-y), rgba(0,0,0,0.03), transparent 40%); opacity: 0; transition: opacity 0.3s; pointer-events: none; }
+        .client-card:hover::before { opacity: 1; }
+        .client-logo { display: flex; align-items: center; gap: 8px; color: #111; font-weight: 700; font-size: 18px; letter-spacing: -0.5px; opacity: 0.6; filter: grayscale(100%); transition: opacity 0.4s var(--easing-smooth), filter 0.4s var(--easing-smooth); pointer-events: none; }
+        .client-card:hover .client-logo { opacity: 1; filter: grayscale(0%); }
+        .client-logo svg { height: 28px; width: auto; fill: currentColor; }
+
+        /* Features Dashboard */
+        .features-section { padding: 160px 48px; background-color: var(--bg-page); max-width: 1440px; margin: 0 auto; position: relative; }
+        .features-layout { display: grid; grid-template-columns: 350px 1fr; gap: 80px; align-items: flex-start; }
+        .features-tabs-sticky { position: sticky; top: 160px; display: flex; flex-direction: column; gap: 24px; padding-bottom: 40px; }
+        .feature-tab { font-size: 24px; font-weight: 400; color: var(--text-light-grey); cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; gap: 12px; transform: translateX(0); }
+        .feature-tab.active { color: var(--text-dark); }
+        .feature-tab .arrow { opacity: 0; transform: translateX(-15px); transition: all 0.3s var(--easing-spring); font-size: 24px; font-weight: 300; }
+        .feature-tab.active .arrow { opacity: 1; transform: translateX(0); }
+        .features-scroll-container { display: flex; flex-direction: column; gap: 160px; }
+        .feature-block { display: flex; flex-direction: column; gap: 40px; opacity: 0; transform: translateY(40px); transition: all 0.8s var(--easing-smooth); }
+        .feature-block.active-block { opacity: 1; transform: translateY(0); }
+        
+        .mockup-wrapper { background: #F0F4F8; border-radius: 24px; padding: 60px; display: flex; justify-content: center; position: relative; overflow: hidden; cursor: pointer; }
+        .mockup-card { background: #ffffff; border-radius: 16px; width: 100%; max-width: 760px; box-shadow: 0 20px 50px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,0,0,0.02); display: flex; flex-direction: column; pointer-events: none; }
+        .m-header { display: flex; justify-content: space-between; align-items: center; padding: 24px 32px; border-bottom: 1px solid #f9f9f9; }
+        .m-header h4 { font-size: 18px; font-weight: 600; color: #111; }
+        .m-close { width: 32px; height: 32px; border-radius: 50%; background: #f5f5f5; display: flex; justify-content: center; align-items: center; color: #888; font-size: 18px; transition: background 0.2s; border: none; }
+        .m-rows { display: flex; flex-direction: column; padding: 12px 32px 32px 32px; gap: 4px; }
+        .m-row { display: flex; align-items: center; padding: 16px; border: 1px solid #f0f0f0; border-radius: 12px; transition: all 0.3s ease; background: #fff; }
+        .mockup-wrapper:hover .m-row { box-shadow: 0 4px 15px rgba(0,0,0,0.04); transform: scale(1.01); border-color: #e8e8e8; }
+        .m-col { display: flex; align-items: center; font-size: 14px; }
+        .m-col-check { width: 40px; }
+        .m-checkbox { width: 18px; height: 18px; border: 1.5px solid #e0e0e0; border-radius: 4px; transition: 0.2s; }
+        .m-col-name { flex: 2; font-weight: 500; color: #444; }
+        .m-col-cat { flex: 1.5; color: #888; display: flex; align-items: center; gap: 8px; }
+        .m-col-cat svg { width: 16px; height: 16px; stroke: #888; stroke-width: 1.5; fill: none; }
+        .m-col-status { flex: 1.2; }
+        .m-col-amount { flex: 1; text-align: right; justify-content: flex-end; font-weight: 500; color: #333; }
+        
+        .badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 50px; font-size: 12px; font-weight: 500; }
+        .badge::before { content: ""; width: 6px; height: 6px; border-radius: 50%; }
+        .badge-approved { background: #ffffff; color: #4CAF50; border: 1px solid #E8F5E9; }
+        .badge-approved::before { background: #4CAF50; animation: pulse-green 2s infinite; }
+        .badge-flagged { background: #ffffff; color: #FF9800; border: 1px solid #FFF3E0; }
+        .badge-flagged::before { background: #FF9800; animation: pulse-orange 2s infinite; }
+        .badge-pending { background: #ffffff; color: #2196F3; border: 1px solid #E3F2FD; }
+        .badge-pending::before { background: #2196F3; animation: pulse-blue 2s infinite; }
+        @keyframes pulse-green { 0%, 100% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0); } 50% { box-shadow: 0 0 8px 0 rgba(76, 175, 80, 0.4); } }
+        @keyframes pulse-orange { 0%, 100% { box-shadow: 0 0 0 0 rgba(255, 152, 0, 0); } 50% { box-shadow: 0 0 8px 0 rgba(255, 152, 0, 0.4); } }
+        @keyframes pulse-blue { 0%, 100% { box-shadow: 0 0 0 0 rgba(33, 150, 243, 0); } 50% { box-shadow: 0 0 8px 0 rgba(33, 150, 243, 0.4); } }
+
+        .m-footer { display: flex; justify-content: flex-end; align-items: center; gap: 20px; padding: 24px 32px; border-top: 1px dashed #f0f0f0; margin-top: 12px; }
+        .m-warning { color: #E65100; font-size: 14px; font-weight: 500; display: flex; align-items: center; gap: 6px; }
+        .m-btn-resolve { background: var(--primary-blue); color: #fff; border: none; padding: 12px 24px; border-radius: 50px; font-weight: 500; font-size: 14px; transition: all 0.2s; }
+        .feature-desc { font-size: clamp(20px, 2.5vw, 24px); color: var(--text-grey); line-height: 1.5; font-weight: 400; max-width: 700px; }
+
+        /* ==========================================
+           5. MANAGEMENT SECTION (Level 350 Extended)
+           ========================================== */
+        .management-section {
+            background-color: #000000; color: #ffffff; padding: 160px 48px; position: relative; z-index: 5;
+            transition: background-color 0.6s ease;
+        }
+        
+        .management-header h2 {
+            color: #ffffff; font-size: clamp(40px, 5vw, 64px); font-weight: 500;
+            letter-spacing: -1.5px; margin-bottom: 80px; max-width: 900px; line-height: 1.1; text-wrap: balance;
+        }
+
+        .management-grid {
+            display: flex; flex-direction: column; gap: 80px;
+            max-width: 1440px; margin: 0 auto;
+        }
+
+        .mgt-row { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 40px; align-items: stretch; }
+        .mgt-row.reversed { grid-template-columns: 0.8fr 1.2fr; }
+
+        /* Image Card with Ken Burns */
+        .mgt-image-card {
+            position: relative; border-radius: 24px; overflow: hidden; min-height: 500px;
+            display: flex; align-items: flex-end; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            clip-path: inset(0 0 0 0 round 24px); cursor: pointer;
+        }
+        
+        .mgt-image-bg {
+            position: absolute; inset: -5%; 
+            background-position: center; background-size: cover;
+            transition: transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .mgt-image-card:hover .mgt-image-bg { transform: scale(1.08); }
+        
+        .mgt-card-content {
+            position: relative; z-index: 2; padding: 40px; width: 100%;
+            background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.4) 70%, transparent 100%);
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-top: 1px solid rgba(255,255,255,0.05);
+        }
+        .mgt-card-content p { font-size: 24px; color: #fff; line-height: 1.5; font-weight: 400; max-width: 600px; pointer-events: none; }
+
+        /* White Text/Mockup Card */
+        .mgt-text-card {
+            background: #ffffff; border-radius: 24px; padding: 60px; color: #111;
+            position: relative; overflow: hidden; display: flex; flex-direction: column;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2); cursor: pointer; transition: transform 0.3s;
+        }
+        .mgt-text-card:hover { transform: translateY(-5px); }
+        
+        .glare {
+            position: absolute; width: 400px; height: 400px; background: radial-gradient(circle closest-side, rgba(255,255,255,0.8), transparent);
+            transform: translate(-50%, -50%); pointer-events: none; opacity: 0; transition: opacity 0.3s; mix-blend-mode: overlay; z-index: 10;
+        }
+        .mgt-text-card:hover .glare { opacity: 1; }
+        .mgt-text-card h3 { font-size: 40px; font-weight: 500; letter-spacing: -1.5px; margin-bottom: 40px; pointer-events: none; }
+        
+        .approval-mock { display: flex; flex-direction: column; gap: 16px; margin-top: auto; pointer-events: none; }
+        .mock-line { height: 60px; background: #f5f5f5; border-radius: 12px; width: 100%; display: flex; align-items: center; padding: 0 20px; gap: 16px; }
+        .mock-line::before { content: ""; width: 32px; height: 32px; border-radius: 50%; background: #e0e0e0; }
+        .mock-line::after { content: ""; height: 12px; width: 40%; background: #e0e0e0; border-radius: 6px; }
+        .mock-line.active { background: #F0F9FF; border: 1px solid #BAE6FD; }
+        .mock-line.active::before { background: var(--primary-blue); }
+        .mock-line.active::after { background: #7DD3FC; width: 60%; }
+
+        /* Cyberpunk Scramble Text Setup */
+        .scramble-text { display: inline-block; min-height: 48px; }
+
+        /* ==========================================
+           6. WORKFLOWS BENTO GRID 
+           ========================================== */
+        .workflows-section {
+            background-color: #000000; color: #ffffff; padding: 60px 48px 160px 48px; position: relative; z-index: 5;
+            max-width: 1440px; margin: 0 auto;
+        }
+        
+        .bento-grid {
+            display: grid; grid-template-columns: 1fr 1.5fr; gap: 24px; align-items: stretch;
+        }
+
+        /* Large Bento Card (Image & Button) */
+        .bento-card-large {
+            background-color: #111; border-radius: 24px; position: relative; overflow: hidden;
+            display: flex; flex-direction: column; padding: 60px; border: 1px solid rgba(255,255,255,0.05);
+            min-height: 700px; justify-content: space-between;
+        }
+        
+        .bento-hero-bg {
+            position: absolute; bottom: 0; left: 0; right: 0; height: 75%;
+            background: url('https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?q=80&w=1000&auto=format&fit=crop') center/cover;
+            /* Inner shadow masking to blend top into black */
+            mask-image: linear-gradient(to bottom, transparent 0%, black 30%);
+            -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 30%);
+            z-index: 0; filter: brightness(0.7); transition: transform 0.8s var(--easing-smooth);
+        }
+        .bento-card-large:hover .bento-hero-bg { transform: scale(1.05); }
+
+        .bento-large-content { position: relative; z-index: 2; pointer-events: none; }
+        .bento-large-content h3 { font-size: clamp(32px, 3.5vw, 42px); font-weight: 500; letter-spacing: -1px; line-height: 1.1; margin-bottom: 24px; text-wrap: balance; }
+        .bento-large-content p { font-size: 16px; color: rgba(255,255,255,0.7); line-height: 1.6; font-weight: 400; max-width: 90%; }
+        
+        .btn-glass {
+            position: relative; z-index: 2; margin-top: auto; align-self: flex-start; width: 100%;
+            background: rgba(255,255,255,0.95); color: #000; font-weight: 600; font-size: 15px;
+            padding: 18px 0; border-radius: 50px; border: none; cursor: pointer; text-align: center;
+            backdrop-filter: blur(10px); transition: transform 0.2s, background 0.2s;
+        }
+        .btn-glass:hover { background: #ffffff; transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
+
+        /* Small Bento Cards 2x2 Grid */
+        .bento-grid-small {
+            display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 24px;
+        }
+
+        .bento-card-small {
+            background-color: #f7f7f7; border-radius: 24px; padding: 48px 40px; color: #111;
+            display: flex; flex-direction: column; gap: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.4s var(--easing-spring), box-shadow 0.4s var(--easing-smooth); cursor: pointer;
+            opacity: 0; transform: translateY(30px); /* Setup for staggered reveal */
+        }
+        .bento-card-small.active-bento { opacity: 1; transform: translateY(0); }
+        .bento-card-small:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(255,255,255,0.05); }
+
+        /* Stagger Delays */
+        .bento-card-small:nth-child(1) { transition-delay: 0.0s; }
+        .bento-card-small:nth-child(2) { transition-delay: 0.1s; }
+        .bento-card-small:nth-child(3) { transition-delay: 0.2s; }
+        .bento-card-small:nth-child(4) { transition-delay: 0.3s; }
+
+        .bento-icon-wrap {
+            width: 44px; height: 44px; background: #ffffff; border-radius: 12px; border: 1px solid rgba(0,0,0,0.05);
+            display: flex; justify-content: center; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+        }
+        .bento-icon-wrap svg { width: 20px; height: 20px; stroke: #333; stroke-width: 1.5; fill: none; transition: stroke-dashoffset 0.5s ease; stroke-dasharray: 50; stroke-dashoffset: 0; }
+        .bento-card-small:hover .bento-icon-wrap svg { stroke-dashoffset: 100; stroke: var(--primary-blue); }
+
+        .bento-card-small h4 { font-size: 22px; font-weight: 500; letter-spacing: -0.5px; }
+        .bento-card-small p { font-size: 15px; color: var(--text-grey); line-height: 1.6; font-weight: 400; }
+
+        /* ==========================================
+           7. TESTIMONIAL SECTION
+           ========================================== */
+        .testimonial-section {
+            padding: 120px 48px 40px 48px;
+            background-color: var(--bg-page);
+            max-width: 1440px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .test-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        .test-header h2 {
+            font-size: clamp(40px, 5vw, 56px);
+            font-weight: 500;
+            color: var(--text-dark);
+            line-height: 1.15;
+            letter-spacing: -2px;
+            margin-bottom: 24px;
+        }
+        .test-header p {
+            font-size: 16px;
+            color: var(--text-grey);
+        }
+        .test-card {
+            background: #fafafa;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 1100px;
+            padding: 60px 80px;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+        .test-card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        .test-author {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .author-avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .author-details {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .author-name {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: #111;
+            text-transform: uppercase;
+        }
+        .author-role {
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            color: #888;
+            text-transform: uppercase;
+        }
+        .test-logos {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+        }
+        .test-logos > div {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+            font-size: 22px;
+            letter-spacing: -0.5px;
+        }
+        .logo-active { color: #111; }
+        .logo-faded { color: #d0d0d0; }
+        
+        .test-quote {
+            font-size: clamp(24px, 2.5vw, 34px);
+            line-height: 1.4;
+            font-weight: 400;
+            color: #111;
+            letter-spacing: -0.5px;
+            margin: 20px 0;
+            max-width: 850px;
+        }
+        .test-card-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #eaeaea;
+            padding-top: 32px;
+        }
+        .test-metrics {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+        }
+        .test-metric {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .metric-val {
+            font-size: 20px;
+            font-weight: 500;
+            color: #111;
+        }
+        .metric-lbl {
+            font-size: 14px;
+            color: #888;
+        }
+        .metric-divider {
+            width: 1px;
+            height: 40px;
+            background: #eaeaea;
+        }
+        .test-controls {
+            display: flex;
+            gap: 12px;
+        }
+        .test-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 1px solid #e0e0e0;
+            background: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #111;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .test-btn:hover {
+            border-color: #111;
+            background: #f0f0f0;
+        }
+
+        /* ==========================================
+           9. CASE STUDY BENTO GRID 
+           ========================================== */
+        .case-study-section {
+            padding: 40px 48px 120px 48px;
+            background-color: var(--bg-page);
+            max-width: 1440px;
+            margin: 0 auto;
+        }
+        .cs-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: auto auto;
+            gap: 24px;
+        }
+        .cs-card {
+            border-radius: 24px;
+            overflow: hidden;
+            position: relative;
+        }
+        .cs-card-text {
+            background-color: #f4efeb;
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: flex-start;
+            min-height: 400px;
+        }
+        .cs-card-text h3 {
+            font-size: clamp(32px, 3vw, 40px);
+            font-weight: 400;
+            line-height: 1.2;
+            color: #111;
+            letter-spacing: -1px;
+            max-width: 90%;
+        }
+        .btn-cs {
+            background: #000;
+            color: #fff;
+            padding: 16px 32px;
+            border-radius: 50px;
+            font-weight: 500;
+            font-size: 15px;
+            text-decoration: none;
+            display: inline-block;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .btn-cs:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        }
+        .cs-card-stat {
+            background-color: #eff2f6;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 400px;
+        }
+        .cs-stat-top {
+            padding: 60px;
+            flex: 1;
+            display: flex;
+            align-items: flex-start;
+        }
+        .cs-stat-top h2 {
+            font-size: clamp(80px, 8vw, 120px);
+            font-weight: 400;
+            letter-spacing: -4px;
+            color: #111;
+            line-height: 1;
+        }
+        .cs-stat-bottom {
+            padding: 30px 60px;
+            border-top: 1px solid rgba(0,0,0,0.06);
+            color: #555;
+            font-size: 16px;
+        }
+        .cs-card-image {
+            grid-column: 1 / -1; 
+            min-height: 500px;
+            background: url('https://images.unsplash.com/photo-1601597111158-2fceff292cdc?q=80&w=1400&auto=format&fit=crop') center/cover;
+            padding: 40px;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        /* ==========================================
+           10. BLOG & UPDATES SECTION 
+           ========================================== */
+        .blog-section {
+            padding: 40px 48px 120px 48px;
+            background-color: var(--bg-page);
+            max-width: 1440px;
+            margin: 0 auto;
+        }
+        .blog-header-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 60px;
+            gap: 40px;
+        }
+        .blog-header {
+            max-width: 650px;
+        }
+        .blog-header h2 {
+            font-size: clamp(36px, 4.5vw, 52px);
+            font-weight: 400;
+            letter-spacing: -1.5px;
+            color: var(--text-dark);
+            margin-bottom: 24px;
+            line-height: 1.1;
+        }
+        .blog-header p {
+            font-size: 16px;
+            color: var(--text-grey);
+            line-height: 1.6;
+        }
+        .btn-blog {
+            background: #000;
+            color: #fff;
+            padding: 16px 32px;
+            border-radius: 50px;
+            font-weight: 500;
+            font-size: 15px;
+            text-decoration: none;
+            display: inline-block;
+            transition: transform 0.2s, box-shadow 0.2s;
+            flex-shrink: 0;
+        }
+        .btn-blog:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        }
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+        .blog-card {
+            background-color: #fafafa;
+            border-radius: 16px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .blog-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.06);
+        }
+        .blog-img-wrap {
+            width: 100%;
+            height: 240px;
+            overflow: hidden;
+        }
+        .blog-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s var(--easing-smooth);
+        }
+        .blog-card:hover .blog-img {
+            transform: scale(1.05);
+        }
+        .blog-content {
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+        .blog-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            color: #888;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+        .blog-badge {
+            background-color: #eee;
+            color: #555;
+            padding: 4px 10px;
+            border-radius: 6px;
+        }
+        .blog-dot {
+            font-size: 16px;
+            line-height: 0;
+        }
+        .blog-card-title {
+            font-size: 24px;
+            font-weight: 400;
+            color: #111;
+            line-height: 1.35;
+            letter-spacing: -0.5px;
+            margin-bottom: 40px;
+        }
+        .blog-author {
+            margin-top: auto;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .b-author-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .b-author-details {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .b-author-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: #111;
+        }
+        .b-author-role {
+            font-size: 13px;
+            font-weight: 400;
+            color: #888;
+        }
+
+        /* ==========================================
+           11. CTA SECTION 
+           ========================================== */
+        .cta-section {
+            padding: 40px 48px 120px 48px;
+            background-color: var(--bg-page);
+            max-width: 1440px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+        }
+        .cta-container {
+            width: 100%;
+            max-width: 1300px;
+            border-radius: 20px;
+            background: url('https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?q=80&w=1400&auto=format&fit=crop') center/cover no-repeat;
+            padding: 60px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            min-height: 550px;
+            position: relative;
+            overflow: hidden;
+        }
+        .cta-card {
+            background-color: #000000;
+            border-radius: 20px;
+            padding: 48px;
+            max-width: 440px;
+            color: #ffffff;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            position: relative;
+            z-index: 2;
+        }
+        .cta-card h2 {
+            font-size: clamp(32px, 3.5vw, 40px);
+            font-weight: 400;
+            line-height: 1.15;
+            letter-spacing: -1px;
+            margin-bottom: 24px;
+            color: #ffffff;
+        }
+        .cta-card > p {
+            font-size: 15px;
+            color: rgba(255,255,255,0.75);
+            line-height: 1.6;
+            margin-bottom: 40px;
+        }
+        .cta-feature {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding: 24px 0;
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+        }
+        .cta-feature:last-of-type {
+            border-bottom: none;
+            padding-bottom: 32px;
+        }
+        .cta-f-icon {
+            color: #fff;
+            margin-top: 2px;
+        }
+        .cta-f-icon svg {
+            width: 18px;
+            height: 18px;
+        }
+        .cta-f-text h4 {
+            font-size: 15px;
+            font-weight: 500;
+            margin-bottom: 6px;
+            color: #ffffff;
+        }
+        .cta-f-text p {
+            font-size: 14px;
+            color: rgba(255,255,255,0.55);
+            line-height: 1.5;
+        }
+        .btn-cta {
+            display: block;
+            width: 100%;
+            background: #ffffff;
+            color: #000000;
+            text-align: center;
+            padding: 16px;
+            border-radius: 50px;
+            font-weight: 500;
+            font-size: 15px;
+            text-decoration: none;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .btn-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+        }
+
+        /* ==========================================
+           12. FOOTER SECTION (NEW)
+           ========================================== */
+        .footer-section {
+            background-color: #000000;
+            color: #ffffff;
+            padding: 80px 48px 40px 48px;
+            position: relative;
+            z-index: 5;
+        }
+        .footer-container {
+            max-width: 1440px;
+            margin: 0 auto;
+        }
+        .footer-top {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 80px;
+        }
+        .footer-brand {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            max-width: 300px;
+        }
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 28px;
+            font-weight: 600;
+            letter-spacing: -1px;
+            color: #fff;
+            text-decoration: none;
+        }
+        .footer-brand p {
+            font-size: 20px;
+            font-weight: 400;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+        .footer-contact {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 15px;
+            color: #fff;
+            text-decoration: none;
+        }
+        .footer-contact svg { width: 18px; height: 18px; color: #a0a0a0; }
+        
+        .footer-links-wrapper {
+            display: flex;
+            gap: 120px;
+        }
+        .footer-link-col {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .footer-link-col h4 {
+            font-size: 15px;
+            font-weight: 500;
+            color: #888;
+            margin-bottom: 8px;
+        }
+        .footer-link-col a {
+            font-size: 15px;
+            color: #fff;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .footer-link-col a:hover { color: #888; }
+
+        .footer-middle {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 24px;
+            border-bottom: 1px solid rgba(255,255,255,0.15);
+        }
+        .footer-socials {
+            display: flex;
+            gap: 24px;
+        }
+        .footer-socials a {
+            color: #fff;
+            transition: color 0.2s;
+        }
+        .footer-socials a:hover { color: #888; }
+        .footer-socials svg { width: 20px; height: 20px; fill: currentColor; }
+        
+        .footer-location {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #fff;
+        }
+
+        .footer-bottom-meta {
+            display: flex;
+            justify-content: space-between;
+            padding-top: 24px;
+            font-size: 13px;
+            color: #fff;
+            margin-bottom: 40px;
+        }
+        .footer-legal-links {
+            display: flex;
+            gap: 24px;
+        }
+        .footer-legal-links a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .footer-disclaimer {
+            font-size: 11px;
+            color: #666;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 60px;
+        }
+
+        .footer-credits {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            color: #888;
+        }
+        .framer-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #888;
+            text-decoration: none;
+        }
+        .creator-badge {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .creator-badge img {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+        }
+        
+        @media (max-width: 768px) {
+            .footer-top { flex-direction: column; gap: 60px; }
+            .footer-links-wrapper { flex-direction: column; gap: 40px; }
+            .footer-middle { flex-direction: column; align-items: flex-start; gap: 24px; }
+            .footer-bottom-meta { flex-direction: column; gap: 16px; }
+            .footer-credits { flex-direction: column; align-items: flex-start; gap: 24px; }
+        }
+
+        /* ==========================================
+           13. MODALS, TOASTS & UTILS
+           ========================================== */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(10px); z-index: var(--z-modal); display: flex; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: var(--transition-med); }
+        .modal-overlay.open { opacity: 1; visibility: visible; }
+        .modal-box { background: #111; border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; width: 100%; max-width: 450px; padding: 40px; position: relative; transform: scale(0.95) translateY(20px); transition: var(--transition-med); }
+        .modal-overlay.open .modal-box { transform: scale(1) translateY(0); }
+        .btn-close { position: absolute; top: 20px; right: 20px; background: none; border: none; color: #888; font-size: 24px; transition: color 0.2s; cursor: pointer; }
+        .btn-close:hover { color: #fff; }
+        .input-pro { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 16px; color: #fff; font-size: 15px; margin-bottom: 20px; outline: none; transition: all 0.3s ease; }
+        .input-pro:focus { border-color: rgba(255,255,255,0.4); background: rgba(255,255,255,0.08); }
+        .input-pro.error { border-color: var(--error-red); background: rgba(255, 51, 51, 0.1); }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 20%, 60% { transform: translateX(-5px); } 40%, 80% { transform: translateX(5px); } }
+        .shake { animation: shake 0.4s ease-in-out; }
+        #toast-container { position: fixed; bottom: 24px; right: 24px; z-index: var(--z-toast); display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
+        .toast { background: #fff; color: #111; padding: 16px 24px; border-radius: 12px; font-size: 14px; font-weight: 500; box-shadow: 0 10px 40px rgba(0,0,0,0.15); transform: translateX(120%); opacity: 0; transition: var(--transition-med); display: flex; align-items: center; gap: 12px; }
+        .toast.show { transform: translateX(0); opacity: 1; }
+
+        @media (max-width: 1024px) {
+            .features-layout { grid-template-columns: 1fr; gap: 40px; }
+            .features-tabs-sticky { position: relative; top: 0; flex-direction: row; overflow-x: auto; padding-bottom: 10px; white-space: nowrap; }
+            .mgt-row, .mgt-row.reversed { grid-template-columns: 1fr; }
+            .mgt-image-card { min-height: 400px; }
+            .bento-grid { grid-template-columns: 1fr; }
+            .bento-card-large { min-height: 500px; }
+            .cs-grid { grid-template-columns: 1fr; }
+            .cs-card-image { grid-column: 1 / -1; }
+            
+            /* Blog Grid Responsive */
+            .blog-header-wrapper { flex-direction: column; align-items: flex-start; }
+            .blog-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 768px) {
+            .bento-grid-small { grid-template-columns: 1fr; }
+            .test-card { padding: 40px 24px; }
+            .test-card-top { flex-direction: column; gap: 32px; }
+            .test-logos { flex-wrap: wrap; gap: 20px; }
+            .test-card-bottom { flex-direction: column; align-items: flex-start; gap: 32px; }
+            .test-metrics { flex-direction: column; gap: 16px; align-items: flex-start; }
+            .metric-divider { display: none; }
+            
+            /* Blog Grid Mobile */
+            .blog-grid { grid-template-columns: 1fr; }
+            
+            /* CTA Mobile */
+            .cta-container { padding: 32px 24px; justify-content: center; }
+            .cta-card { padding: 32px; max-width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="noise-overlay"></div>
+    <div id="scroll-progress"></div>
+
+    <nav class="navbar" id="navbar">
+        <a href="#" class="logo interactable">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="2" y="6" width="10" height="10" rx="2" fill="#111" /><rect x="12" y="10" width="10" height="10" rx="2" fill="#111" fill-opacity="0.5" /></svg> Vectura
+        </a>
+        <div class="nav-links">
+            <div class="nav-link-wrap">
+                <div class="nav-item interactable">Product <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></div>
+                <div class="mega-menu menu-product">
+                    <div class="mega-column">
+                        <h4 class="mega-header">Financial Visibility</h4>
+                        <a href="#feat-1" class="mega-item interactable"><div class="mega-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M21 10H7"/><path d="M7 10V14H10V10Z"/></svg></div><div class="mega-text"><h5>Expense Tracking</h5><p>Auto-categorize team expenses and spot anomalies.</p></div></a>
+                    </div>
+                    <div class="mega-column">
+                        <h4 class="mega-header">Operational Control</h4>
+                        <a href="#feat-2" class="mega-item interactable"><div class="mega-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M16 12L12 8L8 12"/><path d="M12 8V16"/></svg></div><div class="mega-text"><h5>Smart Approvals</h5><p>Customize approval flows and skip the email chaos.</p></div></a>
+                    </div>
+                </div>
+            </div>
+            <a href="#" class="nav-item interactable">Pricing</a>
+            <a href="#" class="nav-item interactable">Case studies</a>
+            <a href="#" class="nav-item interactable">Company</a>
+        </div>
+        <button class="btn-nav interactable" onclick="openModal('demoModal')">Request a demo</button>
+    </nav>
+
+    <div class="velocity-wrapper" id="velocityGrid">
+        
+        <div class="hero-wrapper">
+            <section class="hero">
+                <div class="hero-bg-container" id="hero-bg"><video class="hero-video" autoplay loop muted playsinline><source src="https://assets.codepen.io/3364143/7btrrd.mp4" type="video/mp4"></video></div>
+                <div class="hero-overlay"></div>
+                <div class="hero-content">
+                    <h1>Stay fully on top of your<br>business finances</h1>
+                    <p>Vectura helps you track expenses, manage budgets, and make smarter decisions — all in one simple dashboard.</p>
+                    <div class="hero-btns">
+                        <button class="btn-hero btn-primary interactable" onclick="openModal('demoModal')">Request a demo</button>
+                        <button class="btn-hero btn-secondary interactable" onclick="openModal('demoModal')">Contact us</button>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <section class="data-section section-target" id="data">
+            <div class="quote-container">
+                <div class="quote-text" id="quoteText">“Finance is stuck in the past. Vectura gives teams real-time clarity, built-in structure, and smarter control.”</div>
+                <div class="quote-author">
+                    <div class="author-info">DANIEL CHEN<br>CEO & CO-FOUNDER</div>
+                    <div class="author-logo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="2" y="6" width="10" height="10" rx="2" fill="#111" /><rect x="12" y="10" width="10" height="10" rx="2" fill="#111" fill-opacity="0.5" /></svg> Vectura</div>
+                </div>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card tilt-card interactable"><div class="stat-desc">43% rely on manual tools for key finance decisions</div><div class="stat-number" data-target="43" data-suffix="%">0%</div></div>
+                <div class="stat-card tilt-card interactable"><div class="stat-desc">100+ finance emails sent per team, per month</div><div class="stat-number" data-target="100" data-suffix="+">0+</div></div>
+                <div class="stat-card tilt-card interactable"><div class="stat-desc">60% lose track of budget by Q2</div><div class="stat-number" data-target="60" data-suffix="%">0%</div></div>
+            </div>
+        </section>
+
+        <section class="clients-section section-target" id="clients">
+            <div class="clients-header">
+                <h2>Join hundreds of teams<br>moving beyond spreadsheets</h2>
+                <p>Our clients include forward-thinking startups and global leaders — all redefining how modern finance teams work.</p>
+            </div>
+            <div class="clients-divider" id="clientsDivider"></div>
+            <div class="clients-grid">
+                <div class="client-card interactable spotlight-card" style="transition-delay: 0.05s"><div class="client-logo"><svg viewBox="0 0 100 50"><path d="M10,25 a15,15 0 1,0 30,0 a15,15 0 1,0 -30,0" stroke="#111" stroke-width="4" fill="none"/></svg></div></div>
+                <div class="client-card interactable spotlight-card" style="transition-delay: 0.1s"><div class="client-logo"><svg viewBox="0 0 100 50"><path d="M20,35 Q10,15 30,15 T50,35 T70,15 T90,35" stroke="#111" stroke-width="6" fill="none"/></svg></div></div>
+                <div class="client-card interactable spotlight-card" style="transition-delay: 0.15s"><div class="client-logo"><span>Catalxg</span></div></div>
+                <div class="client-card interactable spotlight-card" style="transition-delay: 0.2s"><div class="client-logo"><span>Quantum²</span></div></div>
+                <div class="client-card interactable spotlight-card" style="transition-delay: 0.25s"><div class="client-logo"><svg viewBox="0 0 60 40"><circle cx="20" cy="20" r="12"/><circle cx="40" cy="20" r="12" fill="none" stroke="#111" stroke-width="4"/></svg></div></div>
+                <div class="client-card interactable spotlight-card" style="transition-delay: 0.3s"><div class="client-logo"><span>Boltshift</span></div></div>
+            </div>
+        </section>
+
+        <section class="features-section section-target" id="features">
+            <div class="features-layout">
+                <div class="features-tabs-sticky" id="featureTabs">
+                    <div class="feature-tab active" data-target="feat-1"><span class="arrow">↳</span> Expense tracking made easy</div>
+                    <div class="feature-tab" data-target="feat-2"><span class="arrow">↳</span> Smarter budgeting controls</div>
+                    <div class="feature-tab" data-target="feat-3"><span class="arrow">↳</span> Instant, export-ready reports</div>
+                </div>
+
+                <div class="features-scroll-container">
+                    <div class="feature-block scroll-spy-target" id="feat-1">
+                        <div class="mockup-wrapper interactable">
+                            <div class="mockup-card">
+                                <div class="m-header"><h4>Expense tracking</h4><button class="m-close">&times;</button></div>
+                                <div class="m-rows">
+                                    <div class="m-row">
+                                        <div class="m-col m-col-check"><div class="m-checkbox"></div></div>
+                                        <div class="m-col m-col-name">Lunch with team</div>
+                                        <div class="m-col m-col-cat"><svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg> Meals</div>
+                                        <div class="m-col m-col-status"><span class="badge badge-approved">Approved</span></div>
+                                        <div class="m-col m-col-amount">$ 179.99</div>
+                                    </div>
+                                    <div class="m-row">
+                                        <div class="m-col m-col-check"><div class="m-checkbox"></div></div>
+                                        <div class="m-col m-col-name">Flight to Berlin</div>
+                                        <div class="m-col m-col-cat"><svg viewBox="0 0 24 24"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21.5 4S19.5 4.5 18 6l-3.5 3.5-8.2-1.8c-2 0-3 1-3 1l5 5-4.5 4.5c-1 1-1.5 2.5-1.5 2.5S4 20 5 19l4.5-4.5 5 5c0 0 1-1 1-3l-1.8-8.2Z"/></svg> Travel</div>
+                                        <div class="m-col m-col-status"><span class="badge badge-flagged">Flagged</span></div>
+                                        <div class="m-col m-col-amount">$ 849.99</div>
+                                    </div>
+                                </div>
+                                <div class="m-footer">
+                                    <div class="m-warning"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg> 1 flagged transaction</div>
+                                    <button class="m-btn-resolve">Resolve</button>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="feature-desc reveal-text-trigger">Get a real-time view of every transaction across teams. Vectura auto-categorizes expenses, flags anomalies, and makes expense visibility effortless.</p>
+                    </div>
+
+                    <div class="feature-block scroll-spy-target" id="feat-2">
+                        <div class="mockup-wrapper interactable">
+                            <div class="mockup-card">
+                                <div class="m-header"><h4>Budgeting Controls</h4><button class="m-close">&times;</button></div>
+                                <div class="m-rows">
+                                    <div class="m-row">
+                                        <div class="m-col m-col-name">Q3 Marketing Spend</div>
+                                        <div class="m-col m-col-status"><div style="width: 100px; height: 6px; background:#e0e0e0; border-radius: 3px; overflow:hidden;"><div style="width:40%; height:100%; background:#4CAF50;"></div></div></div>
+                                        <div class="m-col m-col-amount">$12k / $30k</div>
+                                    </div>
+                                    <div class="m-row">
+                                        <div class="m-col m-col-name">Engineering Software</div>
+                                        <div class="m-col m-col-status"><div style="width: 100px; height: 6px; background:#e0e0e0; border-radius: 3px; overflow:hidden;"><div style="width:90%; height:100%; background:#FF9800;"></div></div></div>
+                                        <div class="m-col m-col-amount" style="color: #FF9800;">$9k / $10k</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="feature-desc reveal-text-trigger">Set hard limits, track team spend proactively, and never get caught off guard by end-of-quarter budget overruns.</p>
+                    </div>
+
+                    <div class="feature-block scroll-spy-target" id="feat-3">
+                        <div class="mockup-wrapper interactable">
+                            <div class="mockup-card">
+                                <div class="m-header"><h4>Export Reports</h4><button class="m-close">&times;</button></div>
+                                <div class="m-rows">
+                                    <div class="m-row">
+                                        <div class="m-col m-col-name">October End-of-Month</div>
+                                        <div class="m-col m-col-cat">Auto-generated</div>
+                                        <div class="m-col m-col-amount"><span class="badge badge-approved">Ready .CSV</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="feature-desc reveal-text-trigger">Close your books in hours, not days. Export perfectly formatted data straight to your accounting software instantly.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="management-section dark-zone section-target" id="management">
+            <div class="management-header">
+                <h2>Built-in management tools<br>that keep your team aligned</h2>
+            </div>
+            
+            <div class="management-grid">
+                <div class="mgt-row">
+                    <div class="mgt-image-card parallax-el interactable" data-speed="0.8">
+                        <div class="mgt-image-bg" style="background-image: url('https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=1400&auto=format&fit=crop');"></div>
+                        <div class="mgt-card-content">
+                            <p>No more bottlenecks. Set up custom rules for approval chains to keep business moving safely and transparently.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mgt-text-card parallax-el interactable glare-card" data-speed="1.2">
+                        <div class="glare"></div>
+                        <h3 class="scramble-text" data-text="Smart Approvals">S@#rt Ap%r0va!s</h3>
+                        <div class="approval-mock">
+                            <div class="mock-line"></div>
+                            <div class="mock-line active"></div>
+                            <div class="mock-line"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mgt-row reversed">
+                    <div class="mgt-text-card parallax-el interactable glare-card" data-speed="0.8">
+                        <div class="glare"></div>
+                        <h3 class="scramble-text" data-text="Vendor Oversight">V#nd0r Ov3r$igh!</h3>
+                        <div class="approval-mock">
+                            <div class="mock-line"><span class="badge badge-pending">Review Sync</span></div>
+                            <div class="mock-line"><span class="badge badge-approved">Matched</span></div>
+                        </div>
+                    </div>
+
+                    <div class="mgt-image-card parallax-el interactable" data-speed="1.2">
+                        <div class="mgt-image-bg" style="background-image: url('https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=1400&auto=format&fit=crop');"></div>
+                        <div class="mgt-card-content">
+                            <p>Consolidate your vendors. Compare SaaS overlap and detect redundant subscriptions instantly.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="workflows-section dark-zone section-target" id="workflows">
+            <div class="bento-grid">
+                
+                <div class="bento-card-large interactable parallax-el" data-speed="0.95">
+                    <div class="bento-hero-bg"></div>
+                    <div class="bento-large-content">
+                        <h3>Designed for real-world finance workflows</h3>
+                        <p>From setup to daily use, Vectura streamlines financial workflows — making budgets, expenses, and reporting feel simple from day one.</p>
+                    </div>
+                    <button class="btn-glass interactable" onclick="openModal('demoModal')">Get started with Vectura</button>
+                </div>
+                
+                <div class="bento-grid-small bento-observer-target">
+                    <div class="bento-card-small interactable parallax-el" data-speed="1.05">
+                        <div class="bento-icon-wrap">
+                            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                        </div>
+                        <div>
+                            <h4>Easy onboarding</h4>
+                            <p>Guided setup and hands-on support help your team feel confident with Vectura in just a few days.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="bento-card-small interactable parallax-el" data-speed="1.1">
+                        <div class="bento-icon-wrap">
+                            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                        </div>
+                        <div>
+                            <h4>Fast adoption</h4>
+                            <p>Vectura's clean workflows make it easy for finance teams and operators to jump in and get value quickly.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="bento-card-small interactable parallax-el" data-speed="1.15">
+                        <div class="bento-icon-wrap">
+                            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/></svg>
+                        </div>
+                        <div>
+                            <h4>Flexible integrations</h4>
+                            <p>Connect with accounting tools, HR platforms, and company cards — no disruption to your flow.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="bento-card-small interactable parallax-el" data-speed="1.2">
+                        <div class="bento-icon-wrap">
+                            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="18" y="3" width="4" height="18"/><rect x="10" y="8" width="4" height="13"/><rect x="2" y="13" width="4" height="8"/></svg>
+                        </div>
+                        <div>
+                            <h4>Scalable for growth</h4>
+                            <p>Vectura adapts as you scale with role-based access, multi-entity support, and advanced controls.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="testimonial-section section-target" id="testimonial">
+            <div class="test-header">
+                <h2>The Vectura shift—<br>straight from our users</h2>
+                <p>Hear how Vectura is helping finance leaders take control.</p>
+            </div>
+            
+            <div class="test-card interactable parallax-el" data-speed="1.02">
+                <div class="test-card-top">
+                    <div class="test-author">
+                        <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=200&auto=format&fit=crop" alt="Clara Nguyen" class="author-avatar">
+                        <div class="author-details">
+                            <span class="author-name">Clara Nguyen</span>
+                            <span class="author-role">Head of Finance</span>
+                        </div>
+                    </div>
+                    
+                    <div class="test-logos">
+                        <div class="logo-active">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+                                <rect x="3" y="3" width="8" height="8" fill="#111" fill-opacity="0.5"/>
+                                <rect x="13" y="3" width="8" height="8" fill="#111"/>
+                                <rect x="13" y="13" width="8" height="8" fill="#111"/>
+                                <rect x="3" y="13" width="8" height="8" fill="#111"/>
+                            </svg>
+                            OdeaoLabs
+                        </div>
+                        <div class="logo-faded">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 16c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z"/>
+                            </svg>
+                            Quantum²
+                        </div>
+                        <div class="logo-faded">
+                            <svg width="40" height="20" viewBox="0 0 40 20" fill="none" stroke="currentColor" stroke-width="3">
+                                <rect x="2" y="2" width="36" height="16" rx="8" />
+                            </svg>
+                            Ikigai Labs
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="test-quote">
+                    “Vectura gave us instant visibility into spending across departments. We caught three budget overruns in the first week — and now every decision is backed by real-time data.”
+                </div>
+                
+                <div class="test-card-bottom">
+                    <div class="test-metrics">
+                        <div class="test-metric">
+                            <span class="metric-val">37%</span>
+                            <span class="metric-lbl">Reduction in budget overages</span>
+                        </div>
+                        <div class="metric-divider"></div>
+                        <div class="test-metric">
+                            <span class="metric-val">2x</span>
+                            <span class="metric-lbl">Faster spend approvals</span>
+                        </div>
+                    </div>
+                    
+                    <div class="test-controls">
+                        <button class="test-btn interactable"><svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="1.5" fill="none"><path d="M15 18l-6-6 6-6"/></svg></button>
+                        <button class="test-btn interactable"><svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="1.5" fill="none"><path d="M9 18l6-6-6-6"/></svg></button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="case-study-section section-target" id="case-study">
+            <div class="cs-grid">
+                
+                <div class="cs-card cs-card-text interactable parallax-el" data-speed="1.02">
+                    <h3>How Riverton Foods reduced procurement delays by 42% and gained full supplier cost visibility with Vectura</h3>
+                    <a href="#" class="btn-cs">Read case study</a>
+                </div>
+                
+                <div class="cs-card cs-card-stat interactable parallax-el" data-speed="1.05">
+                    <div class="cs-stat-top">
+                        <h2>$3.1M</h2>
+                    </div>
+                    <div class="cs-stat-bottom">
+                        Annual supplier spend managed in real time
+                    </div>
+                </div>
+                
+                <div class="cs-card cs-card-image interactable parallax-el" data-speed="0.98">
+                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none" class="cs-logo-r">
+                        <path d="M0 0H40V20L20 40H0V0Z" fill="white"/>
+                    </svg>
+                </div>
+              <div class="cs-card cs-card-text interactable parallax-el" data-speed="1.02">
+                    <h3>How Riverton Foods reduced procurement delays by 42% and gained full supplier cost visibility with Vectura</h3>
+                    <a href="#" class="btn-cs">Read case study</a>
+                </div>
+                
+                <div class="cs-card cs-card-stat interactable parallax-el" data-speed="1.05">
+                    <div class="cs-stat-top">
+                        <h2>$3.1M</h2>
+                    </div>
+                    <div class="cs-stat-bottom">
+                        Annual supplier spend managed in real time
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="blog-section section-target" id="blog">
+            <div class="blog-header-wrapper">
+                <div class="blog-header">
+                    <h2>Ideas, insights, and<br>updates from our team</h2>
+                    <p>From product announcements to practical guides — stay in the loop with how Vectura is building smarter finance workflows and sharing what we’ve learned along the way.</p>
+                </div>
+                <a href="#" class="btn-blog">View all posts</a>
+            </div>
+            
+            <div class="blog-grid">
+                <div class="blog-card interactable parallax-el" data-speed="1.02">
+                    <div class="blog-img-wrap">
+                        <img src="https://images.unsplash.com/photo-1573164713988-8665fc963095?q=80&w=800&auto=format&fit=crop" alt="Scaling Finance Ops" class="blog-img">
+                    </div>
+                    <div class="blog-content">
+                        <div class="blog-meta">
+                            <span class="blog-date">MAY 13, 2025</span>
+                            <span class="blog-dot">•</span>
+                            <span class="blog-badge">OPS & STRATEGY</span>
+                        </div>
+                        <h3 class="blog-card-title">Scaling Finance Ops Without Slowing Down</h3>
+                        <div class="blog-author">
+                            <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=150&auto=format&fit=crop" alt="Ella Navarro" class="b-author-avatar">
+                            <div class="b-author-details">
+                                <span class="b-author-name">Ella Navarro</span>
+                                <span class="b-author-role">Head of Finance Ops</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="blog-card interactable parallax-el" data-speed="1.05">
+                    <div class="blog-img-wrap">
+                        <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=800&auto=format&fit=crop" alt="Modern Budget Workflows" class="blog-img">
+                    </div>
+                    <div class="blog-content">
+                        <div class="blog-meta">
+                            <span class="blog-date">MAY 9, 2025</span>
+                            <span class="blog-dot">•</span>
+                            <span class="blog-badge">GUIDES & RESOURCES</span>
+                        </div>
+                        <h3 class="blog-card-title">Modern Budget Workflows That Don't Break Under Pressure</h3>
+                        <div class="blog-author">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=150&auto=format&fit=crop" alt="Jordan Malik" class="b-author-avatar">
+                            <div class="b-author-details">
+                                <span class="b-author-name">Jordan Malik</span>
+                                <span class="b-author-role">Head of Customer Success</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="blog-card interactable parallax-el" data-speed="1.08">
+                    <div class="blog-img-wrap">
+                        <img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=800&auto=format&fit=crop" alt="Roles & Permissions" class="blog-img">
+                    </div>
+                    <div class="blog-content">
+                        <div class="blog-meta">
+                            <span class="blog-date">MAY 5, 2025</span>
+                            <span class="blog-dot">•</span>
+                            <span class="blog-badge">PRODUCT & UPDATES</span>
+                        </div>
+                        <h3 class="blog-card-title">Introducing Roles & Permissions in Vectura</h3>
+                        <div class="blog-author">
+                            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=150&auto=format&fit=crop" alt="Clara Jensen" class="b-author-avatar">
+                            <div class="b-author-details">
+                                <span class="b-author-name">Clara Jensen</span>
+                                <span class="b-author-role">Product Marketing Manager</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta-section section-target" id="cta">
+            <div class="cta-container interactable parallax-el" data-speed="1.02">
+                <div class="cta-card">
+                    <h2>Start with clarity,<br>scale with confidence</h2>
+                    <p>Vectura helps modern finance teams move faster — with real-time visibility, flexible workflows, and automation where it matters most.</p>
+                    
+                    <div class="cta-feature">
+                        <div class="cta-f-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                        </div>
+                        <div class="cta-f-text">
+                            <h4>Fast onboarding</h4>
+                            <p>Most teams are fully live in under a week.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="cta-feature">
+                        <div class="cta-f-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="18" y="3" width="4" height="18"/><rect x="10" y="8" width="4" height="13"/><rect x="2" y="13" width="4" height="8"/></svg>
+                        </div>
+                        <div class="cta-f-text">
+                            <h4>Built for scale</h4>
+                            <p>From startups to growing finance teams — no bloat, no friction.</p>
+                        </div>
+                    </div>
+                    
+                    <a href="#" class="btn-cta interactable">Get started now</a>
+                </div>
+            </div>
+        </section>
+
+        <footer class="footer-section">
+            <div class="footer-container">
+                <div class="footer-top">
+                    <div class="footer-brand">
+                        <a href="#" class="footer-logo">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><rect x="2" y="6" width="10" height="10" rx="2" fill="#fff" /><rect x="12" y="10" width="10" height="10" rx="2" fill="#fff" fill-opacity="0.5" /></svg> Vectura
+                        </a>
+                        <p>Modern finance starts here.</p>
+                        <a href="tel:04453341235" class="footer-contact">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                            0445 334 1235
+                        </a>
+                        <a href="mailto:info@vectura.com" class="footer-contact">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.92 7.94"/></svg>
+                            info@vectura.com
+                        </a>
+                    </div>
+                    
+                    <div class="footer-links-wrapper">
+                        <div class="footer-link-col">
+                            <h4>Features</h4>
+                            <a href="#">Expense tracking</a>
+                            <a href="#">Budgeting</a>
+                            <a href="#">Reporting</a>
+                            <a href="#">Smart approvals</a>
+                            <a href="#">Vendor management</a>
+                            <a href="#">User access & roles</a>
+                        </div>
+                        <div class="footer-link-col">
+                            <h4>Company</h4>
+                            <a href="#">Case studies</a>
+                            <a href="#">About us</a>
+                            <a href="#">Blog</a>
+                            <a href="#">Careers</a>
+                            <a href="#">Contact</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="footer-middle">
+                    <div class="footer-socials">
+                        <a href="#"><svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+                        <a href="#"><svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+                        <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                        <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg></a>
+                    </div>
+                    <div class="footer-location">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                        Powell, Ohio (OH), USA
+                    </div>
+                </div>
+
+                <div class="footer-bottom-meta">
+                    <div>@ 2025 Vectura LTD. All rights reverved</div>
+                    <div class="footer-legal-links">
+                        <a href="#">Terms</a>
+                        <a href="#">Privacy</a>
+                        <a href="#">Cookies</a>
+                    </div>
+                </div>
+
+                <div class="footer-disclaimer">
+                    <p>Vectura is a financial software provider, not a financial institution, lender, or credit intermediary. The services provided by Vectura are intended solely for business use and do not include payment processing, credit issuance, or custody of client funds. Vectura's tools are designed to enhance visibility, automation, and decision-making across finance operations, and should not be interpreted as financial advice or a substitute for professional accounting or tax consultation.</p>
+                    <p>Access to the Vectura platform is subject to our Terms of Use and Privacy Policy. Data entered into the platform is processed in accordance with applicable data protection laws and stored using enterprise-grade security protocols. Vectura does not make any representations regarding compliance outcomes, financial performance, or legal guarantees resulting from use of the platform.</p>
+                    <p>All third-party integrations and APIs are provided "as is" and Vectura assumes no responsibility for the accuracy, availability, or continued support of connected services. Vectura does not provide accounting, tax filing, or regulatory reporting services unless explicitly agreed upon through a signed service agreement. Use of Vectura may involve transmitting financial data through secure APIs or manually imported files. Customers are responsible for ensuring the accuracy of their financial records and for maintaining compliance with applicable local, national, or international regulations. Vectura is not responsible for any losses incurred due to data inaccuracies, missed filings, or misinterpretations of financial data presented through the software.</p>
+                    <p>The Vectura platform is not intended for personal or consumer finance. Access to features such as multi-entity consolidation, AI-based forecasting, and expense anomaly detection may vary depending on plan level and geographic availability. Any forward-looking insights, analytics, or automation features are intended for informational purposes only and should not be solely relied upon when making financial decisions.</p>
+                    <p>Vectura Technologies Ltd. is a private limited company registered in United States of America. For questions related to platform usage, licensing, or data security, please refer to our Help Center or contact support@vectura.com.</p>
+                </div>
+
+                <div class="footer-credits">
+                    <a href="#" class="framer-badge">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M4 0h16v8h-8zM4 8h8l8 8H4zM4 16h8v8z"/></svg> Built in Framer
+                    </a>
+                    <div class="creator-badge">
+                        Created by <img src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?q=80&w=150&auto=format&fit=crop" alt="Creator"> Krzysztof Hejna
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+
+    <div class="modal-overlay" id="demoModal" aria-modal="true" role="dialog">
+        <div class="modal-box">
+            <button class="btn-close interactable" onclick="closeModal('demoModal')">&times;</button>
+            <h2 style="color: #fff; margin-bottom: 8px;">Request Demo</h2>
+            <p style="color: var(--text-muted); margin-bottom: 24px; font-size: 14px;">Enter a valid business email to continue.</p>
+            <form onsubmit="handleProForm(event, 'demoModal')">
+                <input type="email" class="input-pro interactable" placeholder="work@company.com" required>
+                <button type="submit" class="btn-nav interactable" style="width: 100%; padding: 16px; font-size: 16px; background: #fff; color: #000;">Schedule</button>
+            </form>
+        </div>
+    </div>
+    <div id="toast-container"></div>
+
+    <script>
+        // ==========================================
+        // 1. SCROLL SKEW, THEME & PARALLAX ENGINE
+        // ==========================================
+        let lastScrollY = window.scrollY;
+        const velocityGrid = document.getElementById('velocityGrid');
+        const navbar = document.getElementById('navbar');
+        
+        window.addEventListener('scroll', () => {
+            const currentScrollY = window.scrollY;
+            const scrollDelta = currentScrollY - lastScrollY;
+            lastScrollY = currentScrollY;
+
+            // Velocity Skew 
+            const skewAmount = Math.max(-1.2, Math.min(1.2, scrollDelta * 0.025));
+            velocityGrid.style.transform = `skewY(${skewAmount}deg)`;
+            clearTimeout(window.skewTimeout);
+            window.skewTimeout = setTimeout(() => { velocityGrid.style.transform = 'skewY(0deg)'; }, 100);
+
+            // Progress & Nav Sticky
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            document.getElementById('scroll-progress').style.width = (currentScrollY / height) * 100 + "%";
+            if (currentScrollY > 20) navbar.classList.add('scrolled'); else navbar.classList.remove('scrolled');
+
+            // Parallax Engine
+            document.querySelectorAll('.parallax-el').forEach(el => {
+                const rect = el.getBoundingClientRect();
+                if(rect.top < window.innerHeight && rect.bottom > 0) {
+                    const speed = parseFloat(el.getAttribute('data-speed'));
+                    const yPos = (window.innerHeight - rect.top) * (speed - 1);
+                    el.style.transform = `translateY(${yPos}px)`;
+                }
+            });
+        }, { passive: true });
+
+        // ==========================================
+        // 2. DYNAMIC THEME OBSERVER (Level 350 Unified Zone)
+        // ==========================================
+        const darkZones = document.querySelectorAll('.dark-zone, .footer-section');
+        const themeObserver = new IntersectionObserver((entries) => {
+            // Check if ANY dark zone is intersecting in the upper part of screen
+            let isDarkZoneActive = Array.from(darkZones).some(zone => {
+                const rect = zone.getBoundingClientRect();
+                return rect.top < window.innerHeight * 0.2 && rect.bottom > window.innerHeight * 0.1;
+            });
+
+            if (isDarkZoneActive) {
+                navbar.classList.add('nav-dark');
+                document.body.style.backgroundColor = '#000000';
+            } else {
+                navbar.classList.remove('nav-dark');
+                document.body.style.backgroundColor = '#ffffff';
+            }
+        }, { threshold: [0, 0.1, 0.5, 1] }); // More trigger points for precision
+        
+        darkZones.forEach(zone => themeObserver.observe(zone));
+
+        // ==========================================
+        // 3. 3D GLARE, TILT & SCRAMBLE
+        // ==========================================
+        document.querySelectorAll('.tilt-card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const rotateX = (((e.clientY - rect.top) - rect.height/2) / (rect.height/2)) * -8;
+                const rotateY = (((e.clientX - rect.left) - rect.width/2) / (rect.width/2)) * 8;
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+            });
+            card.addEventListener('mouseleave', () => card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`);
+        });
+
+        document.querySelectorAll('.glare-card').forEach(card => {
+            const glare = card.querySelector('.glare');
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                glare.style.left = `${e.clientX - rect.left}px`;
+                glare.style.top = `${e.clientY - rect.top}px`;
+            });
+        });
+
+        // Cyberpunk Text Scrambler Function
+        const chars = '!<>-_\\/[]{}—=+*^?#_';
+        function scrambleText(element) {
+            const original = element.getAttribute('data-text');
+            let iteration = 0;
+            clearInterval(element.interval);
+            element.interval = setInterval(() => {
+                element.innerText = original.split('').map((letter, index) => {
+                    if(index < iteration) return original[index];
+                    return chars[Math.floor(Math.random() * chars.length)];
+                }).join('');
+                if(iteration >= original.length) clearInterval(element.interval);
+                iteration += 1 / 3;
+            }, 30);
+        }
+
+        // ==========================================
+        // 4. MASTER INTERSECTION OBSERVER
+        // ==========================================
+        const quoteEl = document.getElementById('quoteText');
+        const words = quoteEl.innerText.split(' '); quoteEl.innerHTML = '';
+        words.forEach((word, index) => {
+            const wrap = document.createElement('div'); wrap.className = 'reveal-word';
+            const inner = document.createElement('span'); inner.innerText = word + '\u00A0';
+            inner.style.transitionDelay = `${index * 0.04}s`; wrap.appendChild(inner); quoteEl.appendChild(wrap);
+        });
+
+        function animateCounter(el) {
+            const target = parseInt(el.getAttribute('data-target')), suffix = el.getAttribute('data-suffix');
+            let start = null;
+            const step = (ts) => {
+                if(!start) start = ts;
+                const progress = Math.min((ts - start) / 2000, 1);
+                el.innerText = Math.floor((1 - Math.pow(1 - progress, 4)) * target) + suffix;
+                if(progress < 1) requestAnimationFrame(step); else el.innerText = target + suffix;
+            }; requestAnimationFrame(step);
+        }
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    if (entry.target.id === 'data') {
+                        entry.target.querySelectorAll('.reveal-word').forEach(w => w.classList.add('active'));
+                        entry.target.querySelectorAll('.stat-number').forEach(n => { if(!n.classList.contains('counted')) { animateCounter(n); n.classList.add('counted'); } });
+                    }
+                    if (entry.target.id === 'clients') {
+                        document.getElementById('clientsDivider').classList.add('active');
+                        entry.target.querySelectorAll('.client-card').forEach(c => c.classList.add('active'));
+                    }
+                    if (entry.target.id === 'management') {
+                        entry.target.querySelectorAll('.scramble-text').forEach(scrambler => {
+                            if(!scrambler.classList.contains('done')) { scrambleText(scrambler); scrambler.classList.add('done'); }
+                        });
+                    }
+                    // Bento Grid Staggered Reveal
+                    if (entry.target.classList.contains('bento-observer-target')) {
+                        entry.target.querySelectorAll('.bento-card-small').forEach(card => card.classList.add('active-bento'));
+                    }
+                }
+            });
+        }, { threshold: 0.2 });
+        document.querySelectorAll('.section-target, .bento-observer-target').forEach(sec => observer.observe(sec));
+
+        // ==========================================
+        // 5. SCROLL-SPY STICKY TABS
+        // ==========================================
+        const spyTargets = document.querySelectorAll('.scroll-spy-target');
+        const tabs = document.querySelectorAll('.feature-tab');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const targetId = tab.getAttribute('data-target');
+                const targetEl = document.getElementById(targetId);
+                const offsetTop = targetEl.getBoundingClientRect().top + window.scrollY - 200; 
+                window.scrollTo({ top: offsetTop, behavior: 'smooth' });
+            });
+        });
+
+        const spyObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    entry.target.classList.add('active-block');
+                    const id = entry.target.id;
+                    tabs.forEach(t => {
+                        if(t.getAttribute('data-target') === id) t.classList.add('active');
+                        else t.classList.remove('active');
+                    });
+                }
+            });
+        }, { rootMargin: "-30% 0px -50% 0px", threshold: 0 }); 
+        spyTargets.forEach(t => spyObserver.observe(t));
+
+        // ==========================================
+        // 6. MODALS, FORMS & TOASTS
+        // ==========================================
+        function openModal(id) { document.getElementById(id).classList.add('open'); document.body.classList.add('no-scroll'); }
+        function closeModal(id) { document.getElementById(id).classList.remove('open'); document.body.classList.remove('no-scroll'); }
+        
+        function handleProForm(e, modalId) {
+            e.preventDefault();
+            const input = e.target.querySelector('input'); const btn = e.target.querySelector('button');
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value)) {
+                input.classList.add('error', 'shake'); showToast("Please enter a valid email.", true);
+                setTimeout(() => input.classList.remove('shake'), 400); return;
+            }
+            const ogText = btn.innerText; btn.innerText = "Securing...";
+            setTimeout(() => { closeModal(modalId); btn.innerText = ogText; input.value = ''; input.classList.remove('error'); showToast("Success! Check your inbox shortly."); }, 1000);
+        }
+
+        function showToast(msg, isError = false) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div'); toast.className = 'toast';
+            toast.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="${isError ? '#ff3333' : '#00C853'}" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="${isError ? 'M12 8v4m0 4h.01' : 'M9 12l2 2 4-4'}"/></svg> <span>${msg}</span>`;
+            container.appendChild(toast); setTimeout(() => toast.classList.add('show'), 10);
+            setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 400); }, 3000);
+        }
+    </script>
+</body>
+</html>
