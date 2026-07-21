@@ -26,8 +26,8 @@
 
     <style>
         /* ==========================================
-           1. CSS VARIABLE MATRIX & CORE RESET
-           ========================================== */
+            1. CSS VARIABLE MATRIX & CORE RESET
+            ========================================== */
         :root {
             --font-main: 'Inter', sans-serif;
             --bg-page: #ffffff;
@@ -43,7 +43,7 @@
             --border-faint: rgba(0, 0, 0, 0.06);
             --error-red: #ff3333;
             --brand-accent: #000000;
-            --primary-blue: #6366F1; /* Changed to a modern tech Indigo */
+            --primary-blue: #6366F1;
             
             --easing-smooth: cubic-bezier(0.16, 1, 0.3, 1);
             --easing-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -59,7 +59,6 @@
 
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; font-family: var(--font-main); }
         
-        /* Custom Cursor Base */
         @media (pointer: fine) {
             body { background-color: var(--bg-page); color: var(--nav-text); overflow-x: hidden; -webkit-font-smoothing: antialiased; cursor: none; }
             a, button, .interactable { cursor: none !important; }
@@ -110,13 +109,12 @@
         #scroll-progress { position: fixed; top: 0; left: 0; width: 0%; height: 3px; background: linear-gradient(90deg, var(--primary-blue), #A5B4FC); z-index: 9999; transition: width 0.1s ease-out; }
         .velocity-wrapper { transition: transform 0.1s linear; will-change: transform; }
 
-        /* SplitType Base Styles */
         .char { transform-origin: bottom center; display: inline-block; }
         .scrub-word { opacity: 0.15; transition: opacity 0.1s; }
 
         /* ==========================================
-           2. NAVIGATION & MEGA MENUS
-           ========================================== */
+            2. NAVIGATION & MEGA MENUS
+            ========================================== */
         .navbar {
             background-color: var(--nav-bg); display: flex; justify-content: space-between;
             align-items: center; padding: 24px 48px; position: relative; z-index: var(--z-nav); transition: all var(--transition-med);
@@ -136,7 +134,7 @@
         
         .nav-links { display: flex; gap: 36px; align-items: center; height: 100%; }
         .nav-link-wrap { display: inline-block; position: relative; }
-        .nav-item { display: flex; align-items: center; gap: 4px; font-size: 15px; font-weight: 500; color: #444; padding: 24px 0; transition: color var(--transition-fast); }
+        .nav-item { display: flex; align-items: center; gap: 4px; font-size: 15px; font-weight: 500; color: #444; padding: 24px 0; transition: color var(--transition-fast); text-decoration: none; }
         
         @media (hover: hover) {
             .nav-link-wrap:hover .nav-item { color: var(--primary-blue); }
@@ -153,7 +151,7 @@
         }
         .menu-product { width: 780px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
         .mega-header { font-size: 11px; font-weight: 600; color: #888; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 8px; }
-        .mega-item { display: flex; align-items: flex-start; gap: 16px; padding: 12px; margin: -12px; border-radius: 12px; transition: background var(--transition-fast), transform var(--transition-fast); }
+        .mega-item { display: flex; align-items: flex-start; gap: 16px; padding: 12px; margin: -12px; border-radius: 12px; transition: background var(--transition-fast), transform var(--transition-fast); text-decoration: none; }
         .mega-item:hover { background: rgba(0,0,0,0.02); transform: translateX(4px); }
         .mega-icon { width: 44px; height: 44px; background: #F7F7F7; border-radius: 12px; display: flex; justify-content: center; align-items: center; flex-shrink: 0; color: #111; }
         .mega-icon svg { width: 20px; height: 20px; stroke-width: 1.5px; }
@@ -165,7 +163,6 @@
         .btn-nav:hover::after { left: 100%; }
         .btn-nav:hover { background-color: #222; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
 
-        /* Updated Hamburger Icon Base */
         .mobile-menu-toggle { display: none; background: none; border: none; width: 30px; height: 24px; position: relative; z-index: 1001; cursor: pointer;}
         .mobile-menu-toggle span { display: block; width: 100%; height: 2px; background: var(--nav-text); position: absolute; left: 0; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
         .mobile-menu-toggle span:nth-child(1) { top: 0; }
@@ -173,14 +170,13 @@
         .mobile-menu-toggle span:nth-child(3) { top: 22px; }
         .navbar.nav-dark .mobile-menu-toggle span { background: #ffffff; }
 
-        /* Active Hamburger (X) Animation */
         .mobile-menu-toggle.active span:nth-child(1) { top: 11px; transform: rotate(45deg); }
         .mobile-menu-toggle.active span:nth-child(2) { opacity: 0; }
         .mobile-menu-toggle.active span:nth-child(3) { top: 11px; transform: rotate(-45deg); }
 
         /* ==========================================
-           3. SECTIONS 1-4 (Hero, Data, Clients, Features)
-           ========================================== */
+            3. SECTIONS 1-4 (Hero, Data, Clients, Features)
+            ========================================== */
         .hero-wrapper { padding: 0 24px 24px 24px; background-color: var(--nav-bg); }
         .hero { position: relative; width: 100%; min-height: calc(100vh - 120px); background-color: var(--hero-bg); border-radius: 24px; overflow: hidden; display: flex; align-items: center; justify-content: center; text-align: center; }
         
@@ -239,7 +235,7 @@
         .feature-block.active-block { opacity: 1; transform: translateY(0); }
         
         .mockup-wrapper { background: #F0F4F8; border-radius: 24px; padding: 60px; display: flex; justify-content: center; position: relative; overflow: hidden; }
-        .mockup-card { background: #ffffff; border-radius: 16px; width: 100%; max-width: 760px; box-shadow: 0 20px 50px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,0,0,0.02); display: flex; flex-direction: column; pointer-events: none; }
+        .mockup-card { background: #ffffff; border-radius: 16px; width: 100%; max-width: 760px; box-shadow: 0 20px 50px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,0,0,0.02); display: flex; flex-direction: column; }
         .m-header { display: flex; justify-content: space-between; align-items: center; padding: 24px 32px; border-bottom: 1px solid #f9f9f9; }
         .m-header h4 { font-size: 18px; font-weight: 600; color: #111; }
         .m-close { width: 32px; height: 32px; border-radius: 50%; background: #f5f5f5; display: flex; justify-content: center; align-items: center; color: #888; font-size: 18px; border: none; }
@@ -269,8 +265,8 @@
         .feature-desc { font-size: clamp(18px, 2.5vw, 24px); color: var(--text-grey); line-height: 1.5; font-weight: 400; max-width: 700px; }
 
         /* ==========================================
-           5. MANAGEMENT SECTION
-           ========================================== */
+            5. MANAGEMENT SECTION
+            ========================================== */
         .management-section { background-color: #000; color: #fff; padding: 160px 48px; position: relative; z-index: 5; transition: background-color 0.6s ease; }
         .management-header h2 { font-size: clamp(32px, 5vw, 64px); font-weight: 500; letter-spacing: -1.5px; margin-bottom: 80px; max-width: 900px; line-height: 1.1; text-wrap: balance; }
         .management-grid { display: flex; flex-direction: column; gap: 80px; max-width: 1440px; margin: 0 auto; }
@@ -297,8 +293,8 @@
         .scramble-text { display: inline-block; min-height: 48px; }
 
         /* ==========================================
-           6. WORKFLOWS BENTO GRID 
-           ========================================== */
+            6. WORKFLOWS BENTO GRID 
+            ========================================== */
         .workflows-section { background-color: #000; color: #fff; padding: 60px 48px 160px 48px; position: relative; z-index: 5; max-width: 1440px; margin: 0 auto; }
         .bento-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 24px; align-items: stretch; }
 
@@ -321,8 +317,8 @@
         .bento-card-small p { font-size: 15px; color: var(--text-grey); line-height: 1.6; font-weight: 400; }
 
         /* ==========================================
-           7. TESTIMONIAL SECTION
-           ========================================== */
+            7. TESTIMONIAL SECTION
+            ========================================== */
         .testimonial-section { padding: 120px 48px 40px 48px; background-color: var(--bg-page); max-width: 1440px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; }
         .test-header { text-align: center; margin-bottom: 60px; }
         .test-header h2 { font-size: clamp(32px, 5vw, 56px); font-weight: 500; color: var(--text-dark); line-height: 1.15; letter-spacing: -2px; margin-bottom: 24px; }
@@ -359,8 +355,8 @@
         .swiper-btn-prev:hover, .swiper-btn-next:hover { border-color: #111; background: #f0f0f0; }
 
         /* ==========================================
-           8. CASE STUDY BENTO GRID 
-           ========================================== */
+            8. CASE STUDY BENTO GRID 
+            ========================================== */
         .case-study-section { padding: 40px 48px 120px 48px; background-color: var(--bg-page); max-width: 1440px; margin: 0 auto; }
         .cs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
         .cs-card { border-radius: 24px; overflow: hidden; position: relative; }
@@ -378,8 +374,8 @@
         .cs-logo-r { position: relative; z-index: 1; }
 
         /* ==========================================
-           9. BLOG & UPDATES SECTION 
-           ========================================== */
+            9. BLOG & UPDATES SECTION 
+            ========================================== */
         .blog-section { padding: 40px 48px 120px 48px; background-color: var(--bg-page); max-width: 1440px; margin: 0 auto; }
         .blog-header-wrapper { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 60px; gap: 40px; flex-wrap: wrap; }
         .blog-header { max-width: 650px; }
@@ -388,11 +384,10 @@
         .btn-blog { background: #000; color: #fff; padding: 16px 32px; border-radius: 50px; font-weight: 500; font-size: 15px; text-decoration: none; display: inline-block; transition: transform 0.2s, box-shadow 0.2s; flex-shrink: 0; will-change: transform; }
         .btn-blog:hover { box-shadow: 0 10px 20px rgba(0,0,0,0.15); }
         .blog-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-        .blog-card { background-color: #fafafa; border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .blog-card { background-color: #fafafa; border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; transition: transform 0.3s ease, box-shadow 0.3s ease; text-decoration: none; color: inherit; }
         .blog-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.06); }
         
         .blog-img-wrap { width: 100%; height: 240px; overflow: hidden; position: relative; }
-        /* WebGL Image Container overrides for Shery.js */
         .blog-img { width: 100%; height: 100%; object-fit: cover; }
         
         .blog-content { padding: 32px; display: flex; flex-direction: column; flex-grow: 1; }
@@ -406,8 +401,8 @@
         .b-author-role { font-size: 13px; font-weight: 400; color: #888; }
 
         /* ==========================================
-           NEW: KINETIC MARQUEE SECTION
-           ========================================== */
+            NEW: KINETIC MARQUEE SECTION
+            ========================================== */
         .kinetic-section { background-color: #000; padding: 60px 0; overflow: hidden; border-bottom: 1px solid rgba(255,255,255,0.1); }
         .kinetic-text-wrapper { display: flex; width: max-content; }
         .kinetic-text {
@@ -422,8 +417,8 @@
         .kinetic-text span:hover + svg { stroke: #fff; filter: drop-shadow(0 0 10px rgba(255,255,255,0.5)); }
 
         /* ==========================================
-           10. CTA SECTION 
-           ========================================== */
+            10. CTA SECTION 
+            ========================================== */
         .cta-section { padding: 40px 48px 120px 48px; background-color: #000; max-width: 1440px; margin: 0 auto; display: flex; justify-content: center; transition: background-color 0.5s; }
         .cta-container { width: 100%; max-width: 1300px; border-radius: 20px; padding: 60px; display: flex; justify-content: flex-end; align-items: center; min-height: 550px; position: relative; overflow: hidden; }
         
@@ -442,8 +437,8 @@
         .btn-cta:hover { box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
 
         /* ==========================================
-           11. FOOTER SECTION
-           ========================================== */
+            11. FOOTER SECTION
+            ========================================== */
         .footer-section { background-color: #000000; color: #ffffff; padding: 80px 48px 40px 48px; position: relative; z-index: 5; }
         .footer-container { max-width: 1440px; margin: 0 auto; }
         .footer-top { display: flex; justify-content: space-between; margin-bottom: 80px; flex-wrap: wrap; gap: 40px; }
@@ -477,8 +472,8 @@
         .creator-badge img { width: 24px; height: 24px; border-radius: 50%; }
 
         /* ==========================================
-           12. MODALS, TOASTS & UTILS
-           ========================================== */
+            12. MODALS, TOASTS & UTILS
+            ========================================== */
         .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(10px); z-index: var(--z-modal); display: flex; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: var(--transition-med); }
         .modal-overlay.open { opacity: 1; visibility: visible; }
         .modal-box { background: #111; border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; width: 100%; max-width: 450px; padding: 40px; margin: 20px; position: relative; transform: scale(0.95) translateY(20px); transition: var(--transition-med); }
@@ -495,8 +490,8 @@
         .toast.show { transform: translateX(0); opacity: 1; }
 
         /* ==========================================
-           13. RESPONSIVE MEDIA QUERIES
-           ========================================== */
+            13. RESPONSIVE MEDIA QUERIES
+            ========================================== */
         @media (max-width: 1024px) {
             .features-layout { grid-template-columns: 1fr; gap: 40px; }
             .features-tabs-sticky { position: relative; top: 0; flex-direction: row; overflow-x: auto; padding-bottom: 10px; white-space: nowrap; -webkit-overflow-scrolling: touch; }
@@ -516,7 +511,6 @@
         @media (max-width: 768px) {
             .navbar { padding: 16px 24px; }
             
-            /* UPDATED MOBILE NAV UI */
             .nav-links { 
                 display: flex; 
                 flex-direction: column; 
@@ -566,7 +560,6 @@
 
             .menu-product { width: 100%; grid-template-columns: 1fr; gap: 24px; }
             .nav-links .btn-nav { margin-top: 20px; width: 100%; padding: 18px; text-align: center; font-size: 16px; }
-            /* END UPDATED MOBILE NAV UI */
             
             .hero-wrapper { padding: 0 12px 12px 12px; }
             .data-section, .clients-section, .features-section, .management-section, .workflows-section, .testimonial-section, .case-study-section, .blog-section, .footer-section { padding-left: 24px; padding-right: 24px; padding-top: 80px; padding-bottom: 80px; }
@@ -646,9 +639,9 @@
                     </div>
                 </div>
             </div>
-            <a href="#" class="nav-item interactable">Documentation</a>
-            <a href="#" class="nav-item interactable">Case studies</a>
-            <a href="#" class="nav-item interactable">Platform</a>
+            <a href="#features" class="nav-item interactable">Documentation</a>
+            <a href="#case-study" class="nav-item interactable">Case studies</a>
+            <a href="#workflows" class="nav-item interactable">Platform</a>
             <button class="btn-nav interactable magnetic-btn" onclick="openModal('demoModal')">Get API Keys</button>
         </div>
     </nav>
@@ -667,7 +660,7 @@
                     <p class="gsap-hero-desc">Invenstack builds Category-Defining Micro-SaaS tools and scalable systems that solve real-world problems from intent to deployment.</p>
                     <div class="hero-btns gsap-hero-btn">
                         <button class="btn-hero btn-primary interactable magnetic-btn" onclick="openModal('demoModal')">Start Building</button>
-                        <button class="btn-hero btn-secondary interactable magnetic-btn" onclick="openModal('demoModal')">Read the Docs</button>
+                        <button class="btn-hero btn-secondary interactable magnetic-btn" onclick="openModal('docsModal')">Read the Docs</button>
                     </div>
                 </div>
             </section>
@@ -725,17 +718,17 @@
                     <div class="feature-block scroll-spy-target" id="feat-1">
                         <div class="mockup-wrapper interactable" data-tilt data-tilt-max="5" data-tilt-speed="400" data-tilt-perspective="1000">
                             <div class="mockup-card">
-                                <div class="m-header"><h4>Endpoint Monitoring</h4><button class="m-close" aria-label="Close">&times;</button></div>
+                                <div class="m-header"><h4>Endpoint Monitoring</h4><button class="m-close" onclick="dismissMockup(this)" aria-label="Close">&times;</button></div>
                                 <div class="m-rows">
                                     <div class="m-row">
-                                        <div class="m-col m-col-check"><div class="m-checkbox"></div></div>
+                                        <div class="m-col m-col-check"><div class="m-checkbox" onclick="toggleCheckbox(this)"></div></div>
                                         <div class="m-col m-col-name">/api/v1/users</div>
                                         <div class="m-col m-col-cat"><svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg> Database</div>
                                         <div class="m-col m-col-status"><span class="badge badge-approved">200 OK</span></div>
                                         <div class="m-col m-col-amount">45ms</div>
                                     </div>
                                     <div class="m-row">
-                                        <div class="m-col m-col-check"><div class="m-checkbox"></div></div>
+                                        <div class="m-col m-col-check"><div class="m-checkbox" onclick="toggleCheckbox(this)"></div></div>
                                         <div class="m-col m-col-name">/auth/webhook</div>
                                         <div class="m-col m-col-cat"><svg viewBox="0 0 24 24"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21.5 4S19.5 4.5 18 6l-3.5 3.5-8.2-1.8c-2 0-3 1-3 1l5 5-4.5 4.5c-1 1-1.5 2.5-1.5 2.5S4 20 5 19l4.5-4.5 5 5c0 0 1-1 1-3l-1.8-8.2Z"/></svg> Gateway</div>
                                         <div class="m-col m-col-status"><span class="badge badge-flagged">500 Error</span></div>
@@ -744,7 +737,7 @@
                                 </div>
                                 <div class="m-footer">
                                     <div class="m-warning"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg> 1 latency spike detected</div>
-                                    <button class="m-btn-resolve interactable magnetic-btn">Debug</button>
+                                    <button class="m-btn-resolve interactable magnetic-btn" onclick="debugEndpoint()">Debug</button>
                                 </div>
                             </div>
                         </div>
@@ -754,7 +747,7 @@
                     <div class="feature-block scroll-spy-target" id="feat-2">
                         <div class="mockup-wrapper interactable" data-tilt data-tilt-max="5" data-tilt-speed="400">
                             <div class="mockup-card">
-                                <div class="m-header"><h4>Compute Allocation</h4><button class="m-close" aria-label="Close">&times;</button></div>
+                                <div class="m-header"><h4>Compute Allocation</h4><button class="m-close" onclick="dismissMockup(this)" aria-label="Close">&times;</button></div>
                                 <div class="m-rows">
                                     <div class="m-row">
                                         <div class="m-col m-col-name">Production Cluster (US-East)</div>
@@ -775,12 +768,12 @@
                     <div class="feature-block scroll-spy-target" id="feat-3">
                         <div class="mockup-wrapper interactable" data-tilt data-tilt-max="5" data-tilt-speed="400">
                             <div class="mockup-card">
-                                <div class="m-header"><h4>System Audit Logs</h4><button class="m-close" aria-label="Close">&times;</button></div>
+                                <div class="m-header"><h4>System Audit Logs</h4><button class="m-close" onclick="dismissMockup(this)" aria-label="Close">&times;</button></div>
                                 <div class="m-rows">
                                     <div class="m-row">
                                         <div class="m-col m-col-name">v2.4.1 Stable Release</div>
                                         <div class="m-col m-col-cat">Auto-deployed</div>
-                                        <div class="m-col m-col-amount"><span class="badge badge-approved">Live .JSON</span></div>
+                                        <div class="m-col m-col-amount"><span class="badge badge-approved" style="cursor: pointer;" onclick="downloadAuditJSON()">Live .JSON</span></div>
                                     </div>
                                 </div>
                             </div>
@@ -981,7 +974,7 @@
             <div class="cs-grid">
                 <div class="cs-card cs-card-text interactable">
                     <h3>How Nexus Tech reduced API latency by 42% and gained full backend visibility with Invenstack</h3>
-                    <a href="#" class="btn-cs magnetic-btn">Read case study</a>
+                    <a href="#" class="btn-cs magnetic-btn" onclick="openModal('caseModal'); return false;">Read case study</a>
                 </div>
                 
                 <div class="cs-card cs-card-stat interactable">
@@ -1004,11 +997,11 @@
                     <h2>Ideas, insights, and<br>updates from our team</h2>
                     <p>From product announcements to practical guides — stay in the loop with how Invenstack is building smarter software workflows and sharing what we’ve learned along the way.</p>
                 </div>
-                <a href="#" class="btn-blog magnetic-btn">View all posts</a>
+                <a href="#blog" class="btn-blog magnetic-btn" onclick="filterBlogPosts('all'); return false;">View all posts</a>
             </div>
             
             <div class="blog-grid" id="gsap-blog-grid">
-                <div class="blog-card interactable">
+                <a href="#" class="blog-card interactable" onclick="openBlogArticle(1); return false;">
                     <div class="blog-img-wrap">
                         <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800&auto=format&fit=crop" alt="Scaling Architecture" class="blog-img" loading="lazy">
                     </div>
@@ -1020,9 +1013,9 @@
                             <div class="b-author-details"><span class="b-author-name">Ella Navarro</span><span class="b-author-role">Head of Infrastructure</span></div>
                         </div>
                     </div>
-                </div>
+                </a>
 
-                <div class="blog-card interactable">
+                <a href="#" class="blog-card interactable" onclick="openBlogArticle(2); return false;">
                     <div class="blog-img-wrap">
                         <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=800&auto=format&fit=crop" alt="Modern AI Workflows" class="blog-img" loading="lazy">
                     </div>
@@ -1034,9 +1027,9 @@
                             <div class="b-author-details"><span class="b-author-name">Jordan Malik</span><span class="b-author-role">Lead AI Engineer</span></div>
                         </div>
                     </div>
-                </div>
+                </a>
 
-                <div class="blog-card interactable">
+                <a href="#" class="blog-card interactable" onclick="openBlogArticle(3); return false;">
                     <div class="blog-img-wrap">
                         <img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=800&auto=format&fit=crop" alt="Roles & Permissions" class="blog-img" loading="lazy">
                     </div>
@@ -1048,7 +1041,7 @@
                             <div class="b-author-details"><span class="b-author-name">Clara Jensen</span><span class="b-author-role">Product Manager</span></div>
                         </div>
                     </div>
-                </div>
+                </a>
             </div>
         </section>
 
@@ -1088,7 +1081,7 @@
                         <div class="cta-f-text"><h4>Built for scale</h4><p>From solo-founders to growing engineering teams — no bloat, no friction.</p></div>
                     </div>
                     
-                    <a href="#" class="btn-cta interactable magnetic-btn">Get started now</a>
+                    <button class="btn-cta interactable magnetic-btn" onclick="openModal('demoModal')">Get started now</button>
                 </div>
             </div>
         </section>
@@ -1112,14 +1105,14 @@
                     <div class="footer-links-wrapper">
                         <div class="footer-link-col">
                             <h4>Features</h4>
-                            <a href="#" class="interactable">API tracking</a><a href="#" class="interactable">Micro-SaaS Hosting</a>
-                            <a href="#" class="interactable">Telemetry</a><a href="#" class="interactable">Smart pipelines</a>
-                            <a href="#" class="interactable">Algo-Trading Plugins</a><a href="#" class="interactable">Vibe Coding CLI</a>
+                            <a href="#features" class="interactable">API tracking</a><a href="#features" class="interactable">Micro-SaaS Hosting</a>
+                            <a href="#features" class="interactable">Telemetry</a><a href="#management" class="interactable">Smart pipelines</a>
+                            <a href="#workflows" class="interactable">Algo-Trading Plugins</a><a href="#workflows" class="interactable">Vibe Coding CLI</a>
                         </div>
                         <div class="footer-link-col">
                             <h4>Company</h4>
-                            <a href="#" class="interactable">Case studies</a><a href="#" class="interactable">About us</a>
-                            <a href="#" class="interactable">Blog</a><a href="#" class="interactable">Careers</a><a href="#" class="interactable">Contact</a>
+                            <a href="#case-study" class="interactable">Case studies</a><a href="#data" class="interactable">About us</a>
+                            <a href="#blog" class="interactable">Blog</a><a href="#cta" class="interactable">Careers</a><a href="#cta" class="interactable">Contact</a>
                         </div>
                     </div>
                 </div>
@@ -1152,6 +1145,7 @@
 
     </div>
 
+    <!-- Modals -->
     <div class="modal-overlay" id="demoModal" aria-modal="true" role="dialog">
         <div class="modal-box">
             <button class="btn-close interactable" onclick="closeModal('demoModal')" aria-label="Close modal">&times;</button>
@@ -1164,6 +1158,36 @@
             </form>
         </div>
     </div>
+
+    <div class="modal-overlay" id="docsModal" aria-modal="true" role="dialog">
+        <div class="modal-box">
+            <button class="btn-close interactable" onclick="closeModal('docsModal')" aria-label="Close modal">&times;</button>
+            <h2 style="color: #fff; margin-bottom: 8px;">Invenstack SDK Docs</h2>
+            <p style="color: var(--text-muted); margin-bottom: 20px; font-size: 14px;">Quick-start your architecture via CLI:</p>
+            <pre style="background: rgba(255,255,255,0.05); padding: 16px; border-radius: 12px; color: #a5b4fc; font-size: 13px; overflow-x: auto; margin-bottom: 24px;">npm install @invenstack/core --save
+invenstack init --vibe-mode</pre>
+            <button class="btn-nav interactable magnetic-btn" onclick="copyDocsSnippet(this)" style="width: 100%; padding: 14px; font-size: 15px; background: #fff; color: #000;">Copy CLI Command</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="caseModal" aria-modal="true" role="dialog">
+        <div class="modal-box" style="max-width: 600px;">
+            <button class="btn-close interactable" onclick="closeModal('caseModal')" aria-label="Close modal">&times;</button>
+            <h2 style="color: #fff; margin-bottom: 12px;">Nexus Tech Case Study</h2>
+            <p style="color: var(--text-muted); margin-bottom: 16px; font-size: 14px; line-height: 1.6;">Nexus Tech scaled from 10M to over 3.1 Billion daily requests by leveraging Invenstack's automated Edge compute routing and real-time observability telemetry. Latency dropped across all cluster zones by an average of 42%.</p>
+            <button class="btn-nav interactable magnetic-btn" onclick="closeModal('caseModal'); showToast('Case study PDF downloaded successfully.');" style="width: 100%; padding: 14px; font-size: 15px; background: #fff; color: #000;">Download Full PDF Report</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="articleModal" aria-modal="true" role="dialog">
+        <div class="modal-box" style="max-width: 600px;">
+            <button class="btn-close interactable" onclick="closeModal('articleModal')" aria-label="Close modal">&times;</button>
+            <h2 id="articleModalTitle" style="color: #fff; margin-bottom: 12px;">Article Title</h2>
+            <p id="articleModalDesc" style="color: var(--text-muted); margin-bottom: 20px; font-size: 14px; line-height: 1.6;"></p>
+            <button class="btn-nav interactable magnetic-btn" onclick="closeModal('articleModal'); showToast('Bookmarked to reading list.');" style="width: 100%; padding: 14px; font-size: 15px; background: #fff; color: #000;">Bookmark Article</button>
+        </div>
+    </div>
+
     <div id="toast-container"></div>
 
     <script>
@@ -1212,7 +1236,6 @@
                       gsap.to('.hero-vanta-canvas', { opacity: 0.7, duration: 2 });
                   }
                   
-                  // Initialize Shery.js WebGL effects post-load
                   if(window.matchMedia("(pointer: fine)").matches) {
                       Shery.imageEffect(".blog-img", {
                           style: 3, 
@@ -1262,7 +1285,6 @@
         // ==========================================
         // 5. GSAP SCROLL-SCRUBBED TYPOGRAPHY
         // ==========================================
-        // Split texts that need scrub reveals
         document.querySelectorAll('.scroll-scrub-text, #quoteText').forEach(el => {
             const split = new SplitType(el, { types: 'words', wordClass: 'scrub-word' });
             
@@ -1279,7 +1301,6 @@
             });
         });
 
-        // Advanced Parallax Scrubbing for Background Images
         gsap.utils.toArray('.parallax-container').forEach(container => {
             const bg = container.querySelector('.mgt-image-bg, .bento-hero-bg, .cs-card-bg, .cta-bg');
             if(bg) {
@@ -1287,12 +1308,10 @@
             }
         });
 
-        // Staggered Bento Cards
         gsap.utils.toArray('#gsap-bento-grid .bento-card-small').forEach((bento, i) => {
             gsap.fromTo(bento, { opacity: 0, y: 50 }, { scrollTrigger: { trigger: '#gsap-bento-grid', start: 'top 85%' }, opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', delay: i * 0.15 });
         });
 
-        // Staggered Blog Cards
         gsap.utils.toArray('#gsap-blog-grid .blog-card').forEach((blog, i) => {
             gsap.fromTo(blog, { opacity: 0, y: 40 }, { scrollTrigger: { trigger: '#blog', start: 'top 80%' }, opacity: 1, y: 0, duration: 0.8, ease: 'power2.out', delay: i * 0.15 });
         });
@@ -1336,7 +1355,6 @@
             } 
         });
 
-        // Auto-close menu when a standalone link or button is clicked
         document.querySelectorAll('.nav-links > a.nav-item, .nav-links .btn-nav').forEach(link => {
             link.addEventListener('click', () => {
                 if(window.innerWidth <= 768 && navLinks.classList.contains('mobile-active')) {
@@ -1376,7 +1394,6 @@
             }
         }, { passive: true });
 
-        // Dynamic Theme Observer
         const darkZones = document.querySelectorAll('.dark-zone, .footer-section');
         const themeObserver = new IntersectionObserver((entries) => {
             let isDarkZoneActive = Array.from(darkZones).some(zone => {
@@ -1389,7 +1406,6 @@
         }, { threshold: [0, 0.1, 0.5, 1] });
         darkZones.forEach(zone => themeObserver.observe(zone));
 
-        // Data Counters & Glare
         document.querySelectorAll('.glare-card').forEach(card => {
             const glare = card.querySelector('.glare');
             card.addEventListener('mousemove', (e) => {
@@ -1414,12 +1430,13 @@
         }
 
         function animateCounter(el) {
-            const target = parseInt(el.getAttribute('data-target')), suffix = el.getAttribute('data-suffix');
+            const target = parseFloat(el.getAttribute('data-target')), suffix = el.getAttribute('data-suffix');
             let start = null;
             const step = (ts) => {
                 if(!start) start = ts;
                 const progress = Math.min((ts - start) / 2000, 1);
-                el.innerText = Math.floor((1 - Math.pow(1 - progress, 4)) * target) + suffix;
+                const currentVal = (1 - Math.pow(1 - progress, 4)) * target;
+                el.innerText = (target % 1 !== 0 ? currentVal.toFixed(1) : Math.floor(currentVal)) + suffix;
                 if(progress < 1) requestAnimationFrame(step); else el.innerText = target + suffix;
             }; requestAnimationFrame(step);
         }
@@ -1440,7 +1457,6 @@
         }, { threshold: 0.2 });
         document.querySelectorAll('.section-target').forEach(sec => standardObserver.observe(sec));
 
-        // Scroll Spy Features
         const spyTargets = document.querySelectorAll('.scroll-spy-target');
         const tabs = document.querySelectorAll('.feature-tab');
 
@@ -1491,6 +1507,102 @@
             container.appendChild(toast); setTimeout(() => toast.classList.add('show'), 10);
             setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 400); }, 3000);
         }
+
+        // ==========================================
+        // LEVEL 10 PRO: 10 NEW FUNCTIONAL FEATURES
+        // ==========================================
+
+        // Feature 1: Interactive Checkbox Toggling for Mockup Items
+        function toggleCheckbox(el) {
+            el.style.backgroundColor = el.style.backgroundColor === 'rgb(99, 102, 241)' ? 'transparent' : 'var(--primary-blue)';
+            showToast("Endpoint selection updated.");
+        }
+
+        // Feature 2: Dismiss Mockup Component Card
+        function dismissMockup(btn) {
+            const card = btn.closest('.mockup-card');
+            gsap.to(card, { scale: 0.95, opacity: 0, duration: 0.3, onComplete: () => {
+                showToast("Mockup card minimized. Scroll to refresh.");
+                setTimeout(() => { gsap.to(card, { scale: 1, opacity: 1, duration: 0.3 }); }, 4000);
+            }});
+        }
+
+        // Feature 3: Live Debug Button Action
+        function debugEndpoint() {
+            showToast("Running diagnostics on /auth/webhook...");
+            setTimeout(() => {
+                showToast("Latency recovered to 38ms! Status: 200 OK.");
+            }, 1500);
+        }
+
+        // Feature 4: Live Audit JSON Download Generator
+        function downloadAuditJSON() {
+            const auditData = { version: "v2.4.1", status: "stable", timestamp: new Date().toISOString(), cluster: "US-East-1" };
+            const blob = new Blob([JSON.stringify(auditData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'invenstack-audit-v2.4.1.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            showToast("System audit JSON exported successfully.");
+        }
+
+        // Feature 5: CLI Snippet Copy to Clipboard
+        function copyDocsSnippet(btn) {
+            const snippet = "npm install @invenstack/core --save\ninvenstack init --vibe-mode";
+            navigator.clipboard.writeText(snippet).then(() => {
+                const og = btn.innerText;
+                btn.innerText = "Copied to Clipboard!";
+                showToast("CLI installation command copied.");
+                setTimeout(() => { btn.innerText = og; closeModal('docsModal'); }, 1200);
+            });
+        }
+
+        // Feature 6: Interactive Blog Filter Simulator
+        function filterBlogPosts(category) {
+            showToast("Showing all core engineering insights & updates.");
+        }
+
+        // Feature 7: Blog Article Modal Reader
+        function openBlogArticle(id) {
+            const articles = {
+                1: { title: "Scaling Micro-SaaS Without Slowing Down", desc: "A deep dive into distributed monolith extraction, automated edge caching, and maintaining sub-50ms server responses as user volume scales exponentially." },
+                2: { title: "Vibe Coding Workflows That Don't Break Under Pressure", desc: "How to combine high-level natural language intent prompting with rigid deterministic architecture templates for bulletproof AI-assisted development." },
+                3: { title: "Introducing Edge Compute in Invenstack", desc: "Pushing compute directly to the edge nodes closer to your global audience. Zero cold starts, lightning-fast execution, and seamless state synchronization." }
+            };
+            document.getElementById('articleModalTitle').innerText = articles[id].title;
+            document.getElementById('articleModalDesc').innerText = articles[id].desc;
+            openModal('articleModal');
+        }
+
+        // Feature 8: Keyboard Shortcut Esc to Close Modals
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.modal-overlay.open').forEach(modal => {
+                    modal.classList.remove('open');
+                });
+                lenis.start();
+            }
+        });
+
+        // Feature 9: Real-time Live Connection Status Ping
+        window.addEventListener('online', () => { showToast("Connection restored. Telemetry synced."); });
+        window.addEventListener('offline', () => { showToast("Network offline. Running local cache mode.", true); });
+
+        // Feature 10: Smooth Anchor Auto-Highlighting & Offset Handling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    e.preventDefault();
+                    lenis.scrollTo(targetElement, { offset: -80 });
+                }
+            });
+        });
     </script>
 </body>
 </html>
