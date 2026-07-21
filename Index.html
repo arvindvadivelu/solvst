@@ -511,38 +511,43 @@
         @media (max-width: 768px) {
             .navbar { padding: 16px 24px; }
             
+            /* NEXT-LEVEL MOBILE NAV UI (PURE BLACK & WHITE ACCENTS) */
             .nav-links { 
                 display: flex; 
                 flex-direction: column; 
                 position: fixed; 
                 top: 0; left: 0; 
                 width: 100%; height: 100vh; 
-                background: rgba(5, 5, 5, 0.98); 
-                backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-                padding: 100px 24px 40px; 
-                gap: 24px; 
+                background: #000000; 
+                backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+                padding: 120px 32px 50px; 
+                gap: 20px; 
                 align-items: flex-start; 
                 justify-content: flex-start;
                 opacity: 0; 
                 visibility: hidden; 
-                transform: translateY(-20px);
-                transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+                transform: translateY(-20px) scale(0.98);
+                transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
                 z-index: 999;
                 overflow-y: auto;
+                border-bottom: 1px solid rgba(255,255,255,0.1);
             }
             .nav-links.mobile-active { 
                 opacity: 1; 
                 visibility: visible; 
-                transform: translateY(0); 
+                transform: translateY(0) scale(1); 
             }
             .nav-item {
-                font-size: 20px;
+                font-size: 24px;
+                font-weight: 600;
+                color: #ffffff !important;
                 width: 100%;
                 justify-content: space-between;
-                padding: 12px 0;
-                border-bottom: 1px solid #222;
+                padding: 16px 0;
+                border-bottom: 1px solid rgba(255,255,255,0.1);
+                letter-spacing: -0.5px;
             }
-            .navbar.nav-dark .nav-links { background: rgba(0, 0, 0, 0.98); }
+            .navbar.nav-dark .nav-links { background: #000000; }
             .mobile-menu-toggle { display: block; }
             .mega-menu { 
                 position: relative; top: 0; left: 0; transform: none; width: 100%; border: none; 
@@ -551,7 +556,11 @@
             }
             .nav-link-wrap { width: 100%; }
             .nav-link-wrap.mobile-open .mega-menu { display: block; animation: slideDownNav 0.3s ease forwards; }
-            .nav-link-wrap.mobile-open .nav-item svg.chevron { transform: rotate(180deg); color: var(--primary-blue); }
+            .nav-link-wrap.mobile-open .nav-item svg.chevron { transform: rotate(180deg); color: #ffffff !important; }
+            .mega-text h5 { color: #ffffff !important; font-size: 18px; }
+            .mega-text p { color: rgba(255,255,255,0.7) !important; font-size: 14px; }
+            .mega-header { color: rgba(255,255,255,0.4) !important; }
+            .mega-icon { background: rgba(255,255,255,0.08); color: #ffffff; }
             
             @keyframes slideDownNav {
                 from { opacity: 0; transform: translateY(-10px); }
@@ -559,7 +568,8 @@
             }
 
             .menu-product { width: 100%; grid-template-columns: 1fr; gap: 24px; }
-            .nav-links .btn-nav { margin-top: 20px; width: 100%; padding: 18px; text-align: center; font-size: 16px; }
+            .nav-links .btn-nav { margin-top: 20px; width: 100%; padding: 20px; text-align: center; font-size: 16px; background: #ffffff !important; color: #000000 !important; border-radius: 50px; font-weight: 700; }
+            /* END NEXT-LEVEL MOBILE NAV UI */
             
             .hero-wrapper { padding: 0 12px 12px 12px; }
             .data-section, .clients-section, .features-section, .management-section, .workflows-section, .testimonial-section, .case-study-section, .blog-section, .footer-section { padding-left: 24px; padding-right: 24px; padding-top: 80px; padding-bottom: 80px; }
@@ -1509,7 +1519,7 @@ invenstack init --vibe-mode</pre>
         }
 
         // ==========================================
-        // LEVEL 10, 20, 30 PRO FEATURES HELPER
+        // UTILITY FUNCTIONS (LEVEL 10 TO 30)
         // ==========================================
         function toggleCheckbox(el) {
             el.style.backgroundColor = el.style.backgroundColor === 'rgb(99, 102, 241)' ? 'transparent' : 'var(--primary-blue)';
@@ -1526,7 +1536,7 @@ invenstack init --vibe-mode</pre>
 
         function debugEndpoint() {
             showToast("Running diagnostics on /auth/webhook...");
-            setTimeout => { showToast("Latency recovered to 38ms! Status: 200 OK."); }, 1500;
+            setTimeout(() => { showToast("Latency recovered to 38ms! Status: 200 OK."); }, 1500);
         }
 
         function downloadAuditJSON() {
@@ -1560,26 +1570,20 @@ invenstack init --vibe-mode</pre>
             openModal('articleModal');
         }
 
-        // ==========================================
-        // LEVEL 40 PRO: 10 ADVANCED NEW FEATURES
-        // ==========================================
-
-        // Feature 31: Dynamic Real-time Frame Rate (FPS) Monitor
-        let fpsFrameCount = 0, fpsLastTime = performance.now();
-        function monitorFPS() {
-            fpsFrameCount++;
-            const now = performance.now();
-            if (now - fpsLastTime >= 2000) {
-                const calculatedFPS = Math.round((fpsFrameCount * 1000) / (now - fpsLastTime));
-                if (calculatedFPS < 30) {
-                    showToast(`⚠️ Low FPS detected (${calculatedFPS}). Optimizing rendering pipeline.`);
-                }
-                fpsFrameCount = 0;
-                fpsLastTime = now;
+        let konamiCodeKeys = [];
+        const konamiCodePattern = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+        window.addEventListener('keydown', (e) => {
+            konamiCodeKeys.push(e.key);
+            konamiCodeKeys.splice(-konamiCodePattern.length - 1, konamiCodeKeys.length - konamiCodePattern.length);
+            if (konamiCodeKeys.join('') === konamiCodePattern.join('')) {
+                showToast("🚀 Vibe Coding God Mode Unlocked: All limits removed.");
+                document.querySelectorAll('.stat-card').forEach(card => card.style.borderColor = 'var(--primary-blue)');
             }
-            requestAnimationFrame(monitorFPS);
-        }
-        requestAnimationFrame(monitorFPS);
+        });
+
+        // ==========================================
+        // LEVEL 40 PRO: ADVANCED FEATURES (SILENT TELEMETRY)
+        // ==========================================
 
         // Feature 32: Automated Global Edge Region Pinger Simulator
         function simulateGlobalEdgePing() {
@@ -1660,20 +1664,6 @@ invenstack init --vibe-mode</pre>
                 window.scrollBy({ top: window.innerHeight * 0.8, behavior: 'smooth' });
             }
         });
-
-        // Feature 39: Automated Memory Garbage Collector Trigger on Visibility Change
-        document.addEventListener('visibilitychange', () => {
-            if (document.hidden) {
-                showToast("💤 Background state active. Throttling non-essential telemetry.");
-            } else {
-                showToast("⚡ Active state restored. Telemetry pipeline synchronized.");
-            }
-        });
-
-        // Feature 40: Level 40 Pro Architecture Diagnostic Initializer
-        setTimeout(() => {
-            showToast("💎 Invenstack Pro Level 40 Architecture Initialized Successfully.");
-        }, 4000);
 
         window.addEventListener('online', () => { showToast("Connection restored. Telemetry synced."); });
         window.addEventListener('offline', () => { showToast("Network offline. Running local cache mode.", true); });
