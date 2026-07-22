@@ -42,8 +42,8 @@
             --card-bg: #ffffff;
             --border-faint: rgba(0, 0, 0, 0.08);
             --error-red: #ef4444;
-            --brand-accent: #2563eb;
-            --primary-blue: #2563eb; 
+            --brand-accent: #0050FF;
+            --primary-blue: #0050FF; 
             --primary-blue-glow: rgba(37, 99, 235, 0.15);
             
             --easing-smooth: cubic-bezier(0.16, 1, 0.3, 1);
@@ -1420,12 +1420,7 @@ solvst init --enterprise-mode</pre>
         window.addEventListener('beforeunload', () => {
             sessionStorage.setItem('solvst_scroll_pos', window.scrollY);
         });
-        window.addEventListener('load', () => {
-            const savedPos = sessionStorage.getItem('solvst_scroll_pos');
-            if (savedPos && savedPos > 500) {
-                showToast("📍 Restored previous session architecture view.");
-            }
-        });
+        
 
         // Feature 10: Interactive Global Command Palette Shortcut (Ctrl+J)
         window.addEventListener('keydown', (e) => {
